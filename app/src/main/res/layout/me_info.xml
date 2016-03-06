@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:zhanghao="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+<RelativeLayout
+    android:id="@+id/goto_more"
+    android:background="@drawable/onpress"
+    android:clickable="true"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+        <LinearLayout
+            android:orientation="horizontal"
+            android:id="@+id/head_lin"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+           <!--<com.newthread.medicinebox.ui.view.CircleImage-->
+               <!--android:id="@+id/head_image_me_1"-->
+               <!--android:layout_width="80dp"-->
+               <!--android:layout_margin="15dp"-->
+               <!--zhanghao:type="circle"-->
+               <!--android:src="@drawable/img_login1"-->
+               <!--android:layout_height="80dp" />-->
+            <de.hdodenhof.circleimageview.CircleImageView
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                android:id="@+id/head_image_me_1"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:layout_margin="15dp"
+                android:src="@drawable/img_login1"
+                app:civ_border_width="2dp"
+                app:civ_border_color="@color/colorPrimary"/>
+            <LinearLayout
+                android:layout_gravity="center"
+                android:orientation="vertical"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:id="@+id/NickName"
+                    android:textSize="20sp"
+                    android:text=""
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+                <TextView
+                    android:id="@+id/Age"
+                    android:textSize="20sp"
+                    android:text=""
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
+        </LinearLayout>
+        <ImageView
+            android:src="@drawable/img_next"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="10dp" />
+    </RelativeLayout>
+</LinearLayout>

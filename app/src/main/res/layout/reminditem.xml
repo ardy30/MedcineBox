@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:slideswitch="http://schemas.android.com/apk/res-auto"
+    android:orientation="horizontal"
+    android:padding="16dp"
+    android:background="@drawable/onpressrecylerview"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+    <TextView
+        android:textSize="35sp"
+        android:textColor="#000"
+        android:text="00:00"
+        android:id="@+id/item_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_alignParentStart="true" />
+    <LinearLayout
+        android:layout_marginLeft="10dp"
+        android:orientation="vertical"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/linearLayout"
+        android:layout_marginStart="10dp"
+        android:layout_alignParentTop="true"
+        android:layout_toEndOf="@+id/item_time">
+        <TextView
+            android:textSize="20sp"
+            android:textColor="#000"
+            android:text="@string/medicine"
+            android:id="@+id/item_medicine"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+        <TextView
+            android:textSize="20sp"
+            android:textColor="#000"
+            android:text="@string/tips"
+            android:id="@+id/item_tips"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+    <com.leaking.slideswitch.SlideSwitch
+        android:id="@+id/item_open"
+        android:layout_width="55dp"
+        android:layout_height="30dp"
+        android:layout_gravity="right"
+        slideswitch:isOpen="true"
+        slideswitch:shape="circle"
+        slideswitch:themeColor="@color/colorPrimary"
+        android:layout_centerVertical="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="20dp" />
+</RelativeLayout>

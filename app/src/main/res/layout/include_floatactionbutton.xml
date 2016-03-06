@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingTop="30dp"
+    android:weightSum="1">
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/open_picture"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_picture"
+        app:borderWidth="0dp"
+        app:elevation="6dp"
+        android:layout_marginLeft="50dp"
+        app:pressedTranslationZ="12dp" />
+    <android.support.design.widget.FloatingActionButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:borderWidth="0dp"
+        app:elevation="6dp"
+        android:src="@drawable/img_turnon_light"
+        app:pressedTranslationZ="12dp"
+        android:id="@+id/open_light"
+        android:layout_marginRight="50dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true" />
+    <TextView
+        android:textSize="20sp"
+        android:textColor="@color/white"
+        android:text="@string/openPhoto"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/open_picture"
+        android:layout_marginLeft="58dp"
+        android:id="@+id/textView2" />
+    <TextView
+        android:textSize="20sp"
+        android:textColor="@color/white"
+        android:text="@string/openLight"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/open_light"
+        android:layout_marginRight="58dp"
+        android:layout_alignParentEnd="true" />
+</RelativeLayout>

@@ -1,0 +1,229 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:slideswitch="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+<LinearLayout
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <LinearLayout
+        android:padding="10dp"
+        android:id="@+id/set_time"
+        android:gravity="center"
+        android:clickable="true"
+        android:background="@drawable/onpress"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <TextView
+            android:id="@+id/my_set_time"
+            android:text="00:00"
+            android:textSize="70sp"
+            android:textColor="@color/colorPrimary"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+    <View
+        android:background="@color/colorgray"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"/>
+    <LinearLayout
+        android:background="@color/white"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_margin="20dp"
+            android:layout_height="wrap_content">
+            <EditText
+                android:id="@+id/medicine"
+                android:lines="1"
+                android:inputType="text"
+                android:hint="@string/medicine"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+        </android.support.design.widget.TextInputLayout>
+    </LinearLayout>
+    <View
+        android:background="@color/colorgray"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"/>
+    <LinearLayout
+        android:background="@color/white"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_margin="20dp"
+            android:layout_height="wrap_content">
+            <EditText
+                android:lines="3"
+                android:inputType="text"
+                android:hint="@string/tips"
+                android:id="@+id/tips"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+        </android.support.design.widget.TextInputLayout>
+    </LinearLayout>
+    <View
+        android:background="@color/colorgray"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"/>
+    <RelativeLayout
+        android:id="@+id/chooseRingtone"
+        android:clickable="true"
+        android:background="@drawable/onpress"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="50dp">
+        <TextView
+            android:layout_marginLeft="20dp"
+            android:text="@string/ring_ton"
+            android:textSize="20sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="20dp"
+            android:id="@+id/textView" />
+        <TextView
+            android:id="@+id/songName"
+            android:text=""
+            android:textSize="15sp"
+            android:lines="1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_centerVertical="true"
+            android:layout_toEndOf="@+id/textView" />
+        <ImageView
+            android:src="@drawable/img_next"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="20dp"
+            android:id="@+id/imageView4" />
+
+    </RelativeLayout>
+    <View
+        android:background="@color/colorgray"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"/>
+    <RelativeLayout
+        android:orientation="horizontal"
+        android:background="@drawable/onpress"
+        android:layout_width="match_parent"
+        android:layout_height="50dp">
+        <TextView
+            android:layout_marginLeft="20dp"
+            android:text="@string/vibrate"
+            android:layout_gravity="left|center"
+            android:textSize="20sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_alignParentStart="true"
+            android:layout_marginStart="20dp" />
+        <com.leaking.slideswitch.SlideSwitch
+            android:id="@+id/vibrate"
+            android:layout_width="50dp"
+            android:layout_height="30dp"
+            android:layout_gravity="right"
+            slideswitch:isOpen="false"
+            slideswitch:shape="circle"
+            slideswitch:themeColor="@color/colorPrimary"
+            android:layout_centerVertical="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="20dp" />
+    </RelativeLayout>
+    <View
+        android:background="@color/colorgray"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"/>
+    <LinearLayout
+        android:background="@color/white"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="50dp">
+        <TextView
+            android:layout_marginLeft="20dp"
+            android:text="@string/chongfu"
+            android:layout_gravity="left|center"
+            android:textSize="20sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_alignParentStart="true"
+            android:layout_marginStart="20dp" />
+        <CheckBox
+            android:layout_gravity="center"
+            android:id="@+id/cb_day_1"
+            android:button="@null"
+            android:checked="false"
+            android:layout_marginLeft="10dp"
+            android:background="@drawable/day1_week_selector"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+        <CheckBox
+            android:layout_gravity="center"
+            android:id="@+id/cb_day_2"
+            android:button="@null"
+            android:checked="false"
+            android:layout_marginLeft="5dp"
+            android:background="@drawable/day2_week_selector"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+        <CheckBox
+            android:layout_gravity="center"
+            android:id="@+id/cb_day_3"
+            android:button="@null"
+            android:checked="false"
+            android:layout_marginLeft="5dp"
+            android:background="@drawable/day3_week_selector"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+        <CheckBox
+            android:layout_gravity="center"
+            android:id="@+id/cb_day_4"
+            android:button="@null"
+            android:checked="false"
+            android:layout_marginLeft="5dp"
+            android:background="@drawable/day4_week_selector"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+        <CheckBox
+            android:layout_gravity="center"
+            android:id="@+id/cb_day_5"
+            android:button="@null"
+            android:checked="false"
+            android:layout_marginLeft="5dp"
+            android:background="@drawable/day5_week_selector"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+        <CheckBox
+            android:layout_gravity="center"
+            android:id="@+id/cb_day_6"
+            android:button="@null"
+            android:checked="false"
+            android:layout_marginLeft="5dp"
+            android:background="@drawable/day6_week_selector"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+        <CheckBox
+            android:layout_gravity="center"
+            android:id="@+id/cb_day_7"
+            android:button="@null"
+            android:checked="false"
+            android:layout_marginLeft="5dp"
+            android:background="@drawable/day7_week_selector"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+    <View
+        android:background="@color/colorgray"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"/>
+</LinearLayout>
+</ScrollView>

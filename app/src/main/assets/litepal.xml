@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<litepal>
+    <dbname value="MyData"></dbname>
+    <version value="1"></version>
+    <list>
+        <mapping class="com.newthread.medicinebox.bean.RemindBean"></mapping>
+    </list>
+    <list>
+        <mapping class="com.newthread.medicinebox.bean.FindBean"></mapping>
+    </list>
+</litepal>

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+     android:layout_width="match_parent"
+    android:gravity="center"
+    android:orientation="horizontal"
+    android:layout_height="match_parent">
+        <Button
+            android:id="@+id/button_regist"
+            android:background="@drawable/button_regist"
+            android:text="@string/regist"
+            android:textColor="@color/colorPrimary"
+            android:textSize="20sp"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content" />
+        <Button
+            android:id="@+id/button_login"
+            android:background="@drawable/button_login"
+            android:text="@string/login"
+            android:textColor="#ffffff"
+            android:textSize="20sp"
+            android:layout_marginLeft="60dp"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content" />
+</LinearLayout>

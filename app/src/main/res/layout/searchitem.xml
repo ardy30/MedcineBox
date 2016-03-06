@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_marginTop="10dp"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+    <android.support.v7.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:layout_marginTop="5dp"
+        app:cardCornerRadius="6dp"
+        app:cardElevation="10dp">
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+    <com.android.volley.toolbox.NetworkImageView
+        android:layout_gravity="center"
+        android:src="@mipmap/ic_background"
+        android:id="@+id/search_img"
+        android:layout_width="100dp"
+        android:layout_height="100dp" />
+    <LinearLayout
+        android:layout_marginStart="5dp"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+    <TextView
+        android:id="@+id/search_name"
+        android:textSize="15sp"
+        android:textColor="#000"
+        android:lines="1"
+        android:text="[通用名字]阿莫西林胶囊 "
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+        <TextView
+            android:lines="1"
+            android:id="@+id/search_product"
+            android:textSize="15sp"
+            android:textColor="#000"
+            android:text="[生厂商]广东三才石岐制药有限公司"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+        <TextView
+            android:lines="1"
+            android:id="@+id/search_size"
+            android:textSize="15sp"
+            android:textColor="#000"
+            android:text="[规    格]0.25g*50s"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+        <TextView
+            android:id="@+id/search_Sympton"
+            android:textSize="15sp"
+            android:textColor="#000"
+            android:lines="3"
+            android:text="[适应症]阿莫西林适用于敏感菌(不产b内酰胺酶菌株)所致的感染:中耳炎、鼻窦炎、咽炎、扁桃体炎；泌尿生殖道感染；皮肤软组织感染；急性支气管炎、肺炎；性单纯性淋病伤寒、伤寒带菌者及钩端螺旋体病。"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+    </LinearLayout>
+    </android.support.v7.widget.CardView>
+</LinearLayout>

@@ -1,0 +1,18 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".ui.activity.MainActivity">
+
+    <item
+        android:id="@+id/message"
+        android:title="@string/my_message"
+        android:icon="@drawable/ic_insert_comment_white_36dp"
+        android:orderInCategory="100"
+        app:showAsAction="always"/>
+    <item
+        android:id="@+id/remind"
+        android:title="@string/yongyaotixing"
+        android:icon="@drawable/ic_alarm_add_white_36dp"
+        android:orderInCategory="100"
+        app:showAsAction="always"/>
+</menu>

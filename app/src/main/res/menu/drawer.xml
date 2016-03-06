@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <group android:checkableBehavior="single"
+        >
+        <item
+            android:id="@+id/navigation_item_home"
+            android:icon="@drawable/ic_home_white_48dp"
+            android:title="@string/navigation_home" />
+        <item
+            android:id="@+id/navigation_item_find"
+            android:icon="@drawable/ic_explore_white_48dp"
+            android:title="@string/navigation_find"/>
+        <item
+            android:id="@+id/navigation_item_help"
+            android:icon="@drawable/ic_help_white_48dp"
+            android:title="@string/navigation_help" />
+        <item
+            android:id="@+id/navigation_item_history"
+            android:icon="@drawable/ic_history_white_48dp"
+            android:title="@string/navigation_history" />
+        <item
+            android:checkableBehavior="single"
+            android:id="@+id/navigation_item_QR_scan"
+            android:icon="@drawable/ic_camera_enhance_white_48dp"
+            android:title="@string/navigation_QR_code" />
+        <item
+            android:checkableBehavior="single"
+            android:id="@+id/navigation_item_search"
+            android:icon="@drawable/ic_search_white_48dp"
+            android:title="@string/navigation_search" />
+        <item
+            android:checkableBehavior="single"
+            android:id="@+id/navigation_item_feedback"
+            android:icon="@drawable/ic_message_white_48dp"
+            android:title="@string/navigation_feedback" />
+        <item
+            android:checkableBehavior="single"
+            android:id="@+id/navigation_item_setting"
+            android:icon="@drawable/ic_settings_white_48dp"
+            android:title="@string/navigation_setting" />
+    </group>
+</menu>
