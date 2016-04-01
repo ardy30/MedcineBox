@@ -1,7 +1,10 @@
 package com.newthread.medicinebox.utils.FindUtils;
 
+import android.util.Log;
+
 import com.newthread.medicinebox.bean.FindBean;
 import com.newthread.medicinebox.utils.JsoupUtils;
+import com.newthread.medicinebox.utils.UserUtils.Login;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -42,6 +45,7 @@ public class FindUrlConUtils {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        Log.d("findnews",Result);
         JsoupUtils.ParseFindListHtml(Result, list);
     }
 

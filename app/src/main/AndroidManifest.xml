@@ -38,15 +38,27 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".ui.user.LoginActivityBmob"
+            android:theme="@style/ZH.SwipeBack.Transparent.Theme"
+            />
         <activity android:name=".ui.user.LoginActivity"
             android:theme="@style/ZH.SwipeBack.Transparent.Theme"
+            android:windowSoftInputMode="adjustUnspecified|stateHidden"
+            android:configChanges="orientation|keyboardHidden"
             />
-        <activity android:name=".ui.user.RegistActivity"
+        <activity android:name=".ui.user.RegisterActivityBmob"
             android:theme="@style/ZH.SwipeBack.Transparent.Theme"
             />
+        <activity android:name=".ui.user.RegisterActivity"
+            android:theme="@style/ZH.SwipeBack.Transparent.Theme"
+            android:windowSoftInputMode="adjustUnspecified|stateHidden"
+            android:configChanges="orientation|keyboardHidden"
+            />
+
         <activity android:name=".ui.user.MeActivity"
             android:theme="@style/ZH.SwipeBack.Transparent.Theme"
             />
+
         <activity android:name=".ui.user.MyInforActivity"
             android:theme="@style/ZH.SwipeBack.Transparent.Theme"
             />
@@ -57,6 +69,8 @@
             />
         <activity android:name=".ui.remind.AddRemindActivity"
             android:theme="@style/ZH.SwipeBack.Transparent.Theme"
+            android:windowSoftInputMode="adjustUnspecified|stateHidden"
+            android:configChanges="orientation|keyboardHidden"
             />
         <activity android:name=".ui.remind.RingSetActivity"
             android:theme="@style/ZH.SwipeBack.Transparent.Theme"
@@ -71,12 +85,14 @@
             />
         <activity android:name=".ui.remind.EditRemindActivity"
             android:theme="@style/ZH.SwipeBack.Transparent.Theme"
+            android:windowSoftInputMode="adjustUnspecified|stateHidden"
+            android:configChanges="orientation|keyboardHidden"
             />
         <activity android:name=".ui.find.FindDetailActivity"
             android:theme="@style/ZH.SwipeBack.Transparent.Theme"
             />
         <activity android:name=".ui.activity.DeveloperActivity"
-            android:theme="@style/ZH.SwipeBack.Transparent.Theme"
+
             />
         <activity android:name=".ui.home.SearchMedicineActivity"
             android:theme="@style/ZH.SwipeBack.Transparent.Theme"
@@ -85,10 +101,18 @@
             android:theme="@style/ZH.SwipeBack.Transparent.Theme"
             />
         <activity android:name=".ui.help.AddQuestionActivity"
-            android:theme="@style/ZH.SwipeBack.Transparent.Theme"
+            android:configChanges="orientation|keyboardHidden"
             />
         <activity android:name=".ui.activity.WebViewActivity"/>
         <activity android:name=".ui.activity.GuideActivity"/>
+        <activity
+            android:configChanges="orientation|screenSize"
+           android:name=".ui.help.MyImageSelectorActivity"/>
+        <activity android:name=".ui.help.PostDetailActivity"
+            android:theme="@style/ZH.SwipeBack.Transparent.Theme"
+            />
+        <activity android:name=".ui.activity.ImageDisplayActivity"/>
+        <activity android:name=".ui.activity.SettingActivity"/>
     </application>
 
 </manifest>

@@ -10,7 +10,7 @@ import com.newthread.medicinebox.R;
 
 import java.lang.reflect.Field;
 
-public abstract class SwipeBackActivity extends AppCompatActivity implements SlidingPaneLayout.PanelSlideListener {
+public abstract class SwipeBackActivity extends BaseActivity implements SlidingPaneLayout.PanelSlideListener {
 
     public final static String TAG = SwipeBackActivity.class.getCanonicalName();
 
@@ -33,7 +33,7 @@ public abstract class SwipeBackActivity extends AppCompatActivity implements Sli
                 //属性
                 Field f_overHang = SlidingPaneLayout.class.getDeclaredField("mOverhangSize");
                 f_overHang.setAccessible(true);
-                f_overHang.set(slidingPaneLayout, 0);
+                f_overHang.set(slidingPaneLayout, 100);
             } catch (Exception e) {
                 e.printStackTrace();
             }

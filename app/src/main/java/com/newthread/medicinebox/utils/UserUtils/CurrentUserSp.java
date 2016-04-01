@@ -20,18 +20,19 @@ public class CurrentUserSp {
     /*
     * 保存数据
     * */
-    public void saveCurrentUser(String account,String NickName,int age,boolean isLogin){
+    public void saveCurrentUser(String account,String NickName,String age,boolean isLogin,String session){
         editor.putString("account",account);
         editor.putBoolean("login", isLogin);
         editor.putString("nickname", NickName);
-        editor.putInt("age", age);
+        editor.putString("session",session);
+        editor.putString("age", age);
         editor.commit();
     }
     /*
     * 单独改变登录状态的方法
     * */
     public void ChangeLoginState(boolean loginState){
-        editor.putBoolean("login",loginState);
+        editor.putBoolean("login", loginState);
         editor.commit();
     }
 
@@ -43,11 +44,17 @@ public class CurrentUserSp {
     }
     public String getNickName(){
         //NickName=preferences.getString("nickname","");
-        return  preferences.getString("nickname","");
+        return  preferences.getString("nickname", "");
     }
-    public int getAge(){
+    public String getAge(){
         //Age=preferences.getInt("age",0);
-        return preferences.getInt("age",0);
+        return preferences.getString("age","222");
     }
 
+    public String getSessionId(){
+        return preferences.getString("session","");
+    }
+    public String getAccount(){
+        return preferences.getString("account","");
+    }
 }

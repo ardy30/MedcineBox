@@ -2,10 +2,8 @@ package com.newthread.medicinebox.ui.remind;
 
 import android.content.Intent;
 import android.content.res.AssetFileDescriptor;
-import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
@@ -159,7 +157,7 @@ public class RingSetActivity extends SwipeBackActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_regist, menu);
+        getMenuInflater().inflate(R.menu.menu_done, menu);
         return true;
     }
 
@@ -223,4 +221,9 @@ public class RingSetActivity extends SwipeBackActivity {
     }
 
 
+    @Override
+    public void onPanelOpened(View view) {
+        super.onPanelOpened(view);
+        stopTheSong();
+    }
 }

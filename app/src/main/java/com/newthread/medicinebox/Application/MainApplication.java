@@ -1,8 +1,8 @@
 package com.newthread.medicinebox.Application;
 
-import android.app.Application;
 import android.util.Log;
 
+import com.newthread.medicinebox.utils.NetWorkImageUtils.PicassoPostImageHelper;
 import com.newthread.medicinebox.utils.NetWorkImageUtils.VolleyImageCacheManager;
 import com.newthread.medicinebox.utils.NetWorkImageUtils.VolleyRequestManager;
 
@@ -29,5 +29,6 @@ public class MainApplication extends LitePalApplication {
         Bmob.initialize(getApplicationContext(), AppID);
         VolleyRequestManager.init(getApplicationContext());
         VolleyImageCacheManager.init();
+        PicassoPostImageHelper.init(getApplicationContext());
     }
 }

@@ -8,7 +8,7 @@
     android:padding="10dp"
     android:clickable="true"
     android:id="@+id/goto_remind"
-    android:background="@drawable/onpress"
+    android:background="?android:attr/selectableItemBackground"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
     <ImageView
@@ -39,7 +39,7 @@
         android:layout_height="1dp"/>
     <RelativeLayout
         android:clickable="true"
-        android:background="@drawable/onpress"
+        android:background="?android:attr/selectableItemBackground"
         android:padding="10dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
@@ -71,7 +71,7 @@
         android:layout_height="1dp"/>
     <RelativeLayout
         android:clickable="true"
-        android:background="@drawable/onpress"
+        android:background="?android:attr/selectableItemBackground"
         android:padding="10dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
@@ -103,7 +103,7 @@
         android:layout_height="1dp"/>
     <RelativeLayout
         android:clickable="true"
-        android:background="@drawable/onpress"
+        android:background="?android:attr/selectableItemBackground"
         android:padding="10dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">

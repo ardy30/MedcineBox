@@ -22,6 +22,7 @@ import com.newthread.medicinebox.ui.activity.DeveloperActivity;
 import com.newthread.medicinebox.ui.activity.MainActivity;
 import com.newthread.medicinebox.ui.view.NetworkImageHolderView;
 import com.newthread.medicinebox.utils.ConsUtils;
+import com.newthread.medicinebox.utils.HttpUtils.UrlConnectionUtils;
 import com.newthread.medicinebox.utils.JsoupUtils;
 import com.newthread.medicinebox.utils.FindUtils.FindUrlConUtils;
 import com.newthread.medicinebox.utils.NetWorkHelper;
@@ -31,6 +32,9 @@ import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.assist.QueueProcessingType;
+
+import org.json.JSONStringer;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -67,8 +71,6 @@ public class Security extends Fragment{
             R.drawable.img_changjianbin, R.drawable.img_manxinbing,
             R.drawable.img_muying,R.drawable.img_zhongyao,R.drawable.img_liangxing,
             R.drawable.img_xinxingyaoping,R.drawable.img_more};
-    private String[] images ={"http://img.jianke.net/article/2016/1/22/201612291031120.jpg",
-            "http://img.jianke.net/article/2016/1/22/201612291031120.jpg"};
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -288,13 +290,13 @@ public class Security extends Fragment{
                 case ConsUtils.LOAD_FINISH:
                     JsoupUtils jsoupUtils = new JsoupUtils();
                     NetWorkImages = new ArrayList<>();
-                    if(Result!=null&&Result.equals("")){
+                    if (Result!=null){
                         NetWorkImages = jsoupUtils.ParseImageListUrl(Result);
                         for (int i = 0; i < NetWorkImages.size(); i++) {
                             saveImgUrl(i, NetWorkImages.get(i));
                         }
-                        setImages();
                     }
+                    setImages();
                     security_refresh.setVisibility(View.GONE);
                     break;
                 case ConsUtils.LOAD_LOCAL:
@@ -306,6 +308,7 @@ public class Security extends Fragment{
     };
 
     private void saveImgUrl(int a,String imgurl) {
+        Log.d("urlimg",imgurl);
         helper.saveImgList(imgname[a], imgurl);
     }
 

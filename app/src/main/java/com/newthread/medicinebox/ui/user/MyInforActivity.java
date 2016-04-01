@@ -10,7 +10,6 @@ import android.os.Message;
 import android.provider.MediaStore;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
@@ -22,22 +21,29 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.newthread.medicinebox.R;
-import com.newthread.medicinebox.bean.mUser;
-import com.newthread.medicinebox.theme.StatusBarCompat;
+import com.newthread.medicinebox.bean.UserInfo;
 import com.newthread.medicinebox.ui.activity.SwipeBackActivity;
-import com.newthread.medicinebox.ui.view.CircleImage;
+import com.newthread.medicinebox.utils.ApiUtils;
 import com.newthread.medicinebox.utils.BitmapUtils;
 import com.newthread.medicinebox.utils.ConsUtils;
-import com.newthread.medicinebox.utils.UserUtils.CurrentUserSp;
-import com.newthread.medicinebox.utils.FileUtils;
 import com.newthread.medicinebox.utils.EventBusUtils.MyEventLogin;
+import com.newthread.medicinebox.utils.FileUtils;
+import com.newthread.medicinebox.utils.NetWorkImageUtils.PicassoPostImageHelper;
+import com.newthread.medicinebox.utils.UrlConnectionPost.UrlConnectionFilePost;
+import com.newthread.medicinebox.utils.UserUtils.CurrentUserSp;
+import com.newthread.medicinebox.utils.UserUtils.UpdateUserInfo;
 import com.soundcloud.android.crop.Crop;
-import java.io.File;
 
-import cn.bmob.v3.BmobUser;
-import cn.bmob.v3.datatype.BmobFile;
-import cn.bmob.v3.listener.UpdateListener;
-import cn.bmob.v3.listener.UploadFileListener;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
+
+import butterknife.Bind;
+import butterknife.ButterKnife;
 import de.greenrobot.event.EventBus;
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -47,36 +53,50 @@ import de.hdodenhof.circleimageview.CircleImageView;
  * Created by 张浩 on 2016/1/21.
  */
 public class MyInforActivity extends SwipeBackActivity {
+    @Bind(R.id.toolbar_title)
+    TextView toolbar_title;
+    @Bind(R.id.toolbar)
+    Toolbar toolbar;
     private LinearLayout myInfo;
-    private Toolbar toolbar;
-    private TextView toolbar_title;
     private CircleImageView circleImage;
-    private String[] items={"相册","拍照"};
+    private String[] items = {"相册", "拍照"};
     private String nickname;
-    private int age;
+    private String age;
     private EditText NickName;
     private EditText Age;
     private ProgressDialog dialog;
     private String account;
     private String imgPath;
+    private String sessionId;
     private Uri photo;
     CurrentUserSp sp;
+    UpdateUserInfo updateUserInfo;
+    UserInfo info;
+    File file=new File(ConsUtils.path);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.myinfo);
-        sp=new CurrentUserSp(this);
+        ButterKnife.bind(this);
+        init();
         initUserData();
         initView();
         initHeadImg();
+    }
+
+    private void init() {
+        sp = new CurrentUserSp(this);
+        updateUserInfo = UpdateUserInfo.getInstance();
+        info = updateUserInfo.getInfo();
+        sessionId = sp.getSessionId();
     }
 
     /*
     * 初始化头像
     * */
     private void initHeadImg() {
-        if (FileUtils.fileIsExists(ConsUtils.path_img)){
+        if (FileUtils.fileIsExists(ConsUtils.path_img)) {
             circleImage.setImageBitmap(BitmapUtils.getLoacalBitmap(ConsUtils.path_img));
         }
     }
@@ -86,19 +106,21 @@ public class MyInforActivity extends SwipeBackActivity {
     * 获取传过来的数据
     * */
     private void initUserData() {
-        Intent intent=getIntent();
-        nickname=intent.getStringExtra("nickname");
-        age=intent.getIntExtra("age", 0);
+        nickname = sp.getNickName();
+        age = sp.getAge();
+        account = sp.getAccount();
     }
+
     /*
     * */
     private void initView() {
-        initToolbar();
-        StatusBarCompat.compat(this, getResources().getColor(R.color.colorPrimaryDark));
-        myInfo= (LinearLayout) findViewById(R.id.myinfo_lin);
-        circleImage= (CircleImageView) findViewById(R.id.myInfo_head_img);
-        NickName= (EditText) findViewById(R.id.info_name);
-        Age= (EditText) findViewById(R.id.info_age);
+        toolbar.setTitle("");
+        setUpToolBar(toolbar, true, true);
+        toolbar_title.setText(R.string.detail_info);
+        myInfo = (LinearLayout) findViewById(R.id.myinfo_lin);
+        circleImage = (CircleImageView) findViewById(R.id.myInfo_head_img);
+        NickName = (EditText) findViewById(R.id.info_name);
+        Age = (EditText) findViewById(R.id.info_age);
         NickName.setText(nickname);
         Age.setText(String.valueOf(age));
         circleImage.setOnClickListener(new View.OnClickListener() {
@@ -113,128 +135,152 @@ public class MyInforActivity extends SwipeBackActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_regist, menu);
+        getMenuInflater().inflate(R.menu.menu_done, menu);
         return super.onCreateOptionsMenu(menu);
 
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()){
+        switch (item.getItemId()) {
             case R.id.menu_regist:
                 ShowUpLoadDia();
-                UpLoadImg();
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (file.exists()){
+                            imgPath=ApiUtils.GetUserImg+sp.getAccount()+".jpg";
+                            UpLoadHeadFile();
+                        }else{
+                            UpdateUserInfo();
+                        }
+
+                    }
+                }).start();
                 break;
         }
         return super.onOptionsItemSelected(item);
     }
 
+
+    /**
+     * 上传头像
+     */
+    private void UpLoadHeadFile(){
+        Map<String,String> param=new HashMap<>();
+        param.put("account",sp.getAccount());
+        param.put("sessionId",sp.getSessionId());
+        UrlConnectionFilePost filePost=new UrlConnectionFilePost();
+        try {
+            filePost.upLoadFile(param, "file", file, "", ApiUtils.UpLoadUserPic, new UrlConnectionFilePost.HttpCallBackListener() {
+                @Override
+                public void onSuccess(String response) {
+                    UpdateUserInfo updated=new UpdateUserInfo();
+                    UserInfo info=updated.getInfo();
+                    try {
+                        updated.FileUpLoadEd(response);
+                        if (info.isFileUpLoaded()){
+                            UpdateUserInfo();
+                        }else{
+                            handler.sendEmptyMessage(ConsUtils.SET_INFORMATION_FAILED);
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                    System.out.println("4444444" + response);
+                }
+
+                @Override
+                public void onError(Exception e) {
+
+                }
+            });
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    /*
+    * 跟新用户信息
+    * */
+    private void UpdateUserInfo() {
+        JSONObject jsonParam = new JSONObject();
+        try {
+            jsonParam.put("account", account);
+            jsonParam.put("sessionID", sessionId);
+            jsonParam.put("userVirtualName", NickName.getText());
+            jsonParam.put("userAge", Age.getText());
+            jsonParam.put("userPosition", "湖北武汉");
+            Log.d("updateinfo", String.valueOf(jsonParam));
+            updateUserInfo.UrlUpdateUserInfo(ApiUtils.UpdateUserInfo, jsonParam);
+            updateUserInfo.UpdateEd();
+            if (info.isUpdated()) {
+                handler.sendEmptyMessage(ConsUtils.SET_INFORMATION_DONE);
+            } else {
+                handler.sendEmptyMessage(ConsUtils.SET_INFORMATION_FAILED);
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+    }
+
     /*
     * 显示上传的dia
     * */
-    private void ShowUpLoadDia(){
-        dialog=new ProgressDialog(this);
+    private void ShowUpLoadDia() {
+        dialog = new ProgressDialog(this);
         dialog.setMessage("上传中...");
         dialog.setCancelable(false);
         dialog.show();
     }
+
     /*
     * dismissdia
     * */
-    private void DisMissDia(){
+    private void DisMissDia() {
         dialog.dismiss();
     }
 
-    /*
-    * 保存用户信息
-    * */
-    private void UpLoadUser(){
-        mUser newUser=new mUser();
-        mUser user=BmobUser.getCurrentUser(this,mUser.class);
-        account=user.getUsername();
-        newUser.setHeadimg(imgPath);
-        if (Integer.parseInt(Age.getText().toString())<200){
-            newUser.setAge(Integer.parseInt(Age.getText().toString()));
-        }else{
-            handler.sendEmptyMessage(ConsUtils.RIGHT_AGE);
-        }
-        if (NickName.getText().toString()!=""){
-            newUser.setNickName(NickName.getText().toString());
-        }else{
-            handler.sendEmptyMessage(ConsUtils.COMPLETE_NAME);
-        }
-
-
-        newUser.update(this, user.getObjectId(), new UpdateListener() {
-            @Override
-            public void onSuccess() {
-                handler.sendEmptyMessage(ConsUtils.SET_INFORMATION_DONE);
-            }
-
-            @Override
-            public void onFailure(int i, String s) {
-
-            }
-        });
-
-    }
-
-    /*
-    * 上传头像
-    * */
-    private void UpLoadImg(){
-        final BmobFile file=new BmobFile(new File(ConsUtils.path));
-        if (FileUtils.fileIsExists(ConsUtils.path)){
-            file.uploadblock(this, new UploadFileListener() {
-                @Override
-                public void onSuccess() {
-                    System.out.println(file.getFileUrl(MyInforActivity.this));
-                    imgPath= file.getFileUrl(MyInforActivity.this);
-                    UpLoadUser();
-                }
-                @Override
-                public void onFailure(int i, String s) {
-
-                }
-            });
-        }else{
-            UpLoadUser();
-        }
-
-    }
 
     /*
     * handler
     * */
-    Handler handler=new Handler(){
+    Handler handler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
-            switch (msg.what){
+            switch (msg.what) {
                 case ConsUtils.SET_INFORMATION_DONE:
                     DisMissDia();
-                    Intent intent=new Intent();
+                    Intent intent = new Intent();
                     intent.setData(photo);
                     intent.putExtra("nickname", NickName.getText().toString());
                     intent.putExtra("age", Age.getText().toString());
                     intent.putExtra("url", imgPath);
-                    sp.saveCurrentUser(account, NickName.getText().toString(), Integer.parseInt(Age.getText().toString()), true);
+                    sp.saveCurrentUser(account, NickName.getText().toString(), Age.getText().toString(), true, sessionId);
                     setResult(ConsUtils.SET_INFORMATION_DONE, intent);
                     if (imgPath!=null){
-                        EventBus.getDefault().post(new MyEventLogin(NickName.getText().toString(),imgPath));
+                        PicassoPostImageHelper helper=new PicassoPostImageHelper();
+                        helper.ClearImgByUrl(MyInforActivity.this,ApiUtils.GetUserImg+imgPath);
+                        EventBus.getDefault().post(new MyEventLogin(NickName.getText().toString(), imgPath));
                         Log.d("name", NickName.getText().toString()+"myInFo+url!=null");
                     }
-                    Log.d("name",NickName.getText().toString()+"myInFo");
-                    EventBus.getDefault().post(new MyEventLogin(NickName.getText().toString()));
+                    Log.d("name", NickName.getText().toString() + "myInFo");
                     finish();
                     break;
                 case ConsUtils.RIGHT_AGE:
                     DisMissDia();
-                    Snackbar.make(myInfo,"请输入正确年龄",Snackbar.LENGTH_SHORT).show();
+                    Snackbar.make(myInfo, "请输入正确年龄", Snackbar.LENGTH_SHORT).show();
                     break;
                 case ConsUtils.COMPLETE_NAME:
                     DisMissDia();
-                    Snackbar.make(myInfo,"其输入名字",Snackbar.LENGTH_SHORT).show();
+                    Snackbar.make(myInfo, "其输入名字", Snackbar.LENGTH_SHORT).show();
+                    break;
+                case ConsUtils.SET_INFORMATION_FAILED:
+                    DisMissDia();
+                    Snackbar.make(myInfo, "更新失败!", Snackbar.LENGTH_SHORT).show();
                     break;
             }
 
@@ -242,11 +288,11 @@ public class MyInforActivity extends SwipeBackActivity {
     };
 
 
-            /*
-            * 设置头像的dialog
-            * */
+    /*
+    * 设置头像的dialog
+    * */
     private void showDialog() {
-        AlertDialog alertDialog=new AlertDialog.Builder(this)
+        AlertDialog alertDialog = new AlertDialog.Builder(this)
                 .setTitle(R.string.sethead)
                 .setItems(items, new DialogInterface.OnClickListener() {
                     @Override
@@ -257,7 +303,7 @@ public class MyInforActivity extends SwipeBackActivity {
                                 dialog.dismiss();
                                 break;
                             case 1:
-                                Intent camera= new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                                Intent camera = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                                 camera.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(new File("sdcard", "crop")));
                                 startActivityForResult(camera, ConsUtils.CAMERA_REQUEST_CODE);
                                 dialog.dismiss();
@@ -275,14 +321,13 @@ public class MyInforActivity extends SwipeBackActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode!=RESULT_CANCELED){
-            switch (requestCode)
-            {
+        if (resultCode != RESULT_CANCELED) {
+            switch (requestCode) {
                 case Crop.REQUEST_PICK:
                     beginCrop(data.getData());
                     break;
                 case Crop.REQUEST_CROP:
-                    handleCrop(resultCode,data);
+                    handleCrop(resultCode, data);
                     break;
                 case ConsUtils.CAMERA_REQUEST_CODE:
                     File f = new File("sdcard", "crop");
@@ -296,15 +341,16 @@ public class MyInforActivity extends SwipeBackActivity {
     * 开始裁剪
     * */
     private void beginCrop(Uri source) {
-        Uri destination = Uri.fromFile(new File(getCacheDir(), "cropped.png"));
+        Uri destination = Uri.fromFile(new File(getCacheDir(), "cropped.jpg"));
         Crop.of(source, destination).asSquare().start(this);
     }
+
     /*
     * 裁剪
     * */
     private void handleCrop(int resultCode, Intent result) {
         if (resultCode == RESULT_OK) {
-            photo=Crop.getOutput(result);
+            photo = Crop.getOutput(result);
             circleImage.setImageURI(photo);
             FileUtils.delete("sdcard/crop");
         } else if (resultCode == Crop.RESULT_ERROR) {
@@ -312,22 +358,10 @@ public class MyInforActivity extends SwipeBackActivity {
         }
     }
 
-    /*
-        *
-        * */
-    private void initToolbar() {
-        toolbar= (Toolbar) findViewById(R.id.toolbar);
-        toolbar_title= (TextView) findViewById(R.id.toolbar_title);
-        toolbar_title.setVisibility(View.GONE);
-        toolbar.setTitle(R.string.detail_info);
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setHomeButtonEnabled(true);
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onBackPressed();
-            }
-        });
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        finish();
     }
 }

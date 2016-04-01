@@ -11,27 +11,30 @@ import android.os.Message;
 import android.provider.Settings;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 
 import com.newthread.medicinebox.R;
+import com.newthread.medicinebox.bean.UserInfo;
 import com.newthread.medicinebox.bean.mUser;
 import com.newthread.medicinebox.theme.StatusBarCompat;
 import com.newthread.medicinebox.ui.activity.SwipeBackActivity;
+import com.newthread.medicinebox.utils.ApiUtils;
+import com.newthread.medicinebox.utils.ComUtils;
 import com.newthread.medicinebox.utils.ConsUtils;
-import com.newthread.medicinebox.utils.UserUtils.CurrentUserSp;
 import com.newthread.medicinebox.utils.EventBusUtils.MyEventLogin;
+import com.newthread.medicinebox.utils.UserUtils.CurrentUserSp;
+import com.newthread.medicinebox.utils.UserUtils.Login;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
-import cn.bmob.v3.BmobUser;
-import cn.bmob.v3.listener.SaveListener;
 import de.greenrobot.event.EventBus;
 import kr.co.namee.permissiongen.PermissionFail;
 import kr.co.namee.permissiongen.PermissionGen;
@@ -46,30 +49,42 @@ public class LoginActivity extends SwipeBackActivity implements View.OnClickList
     EditText myAccount;
     @Bind(R.id.my_password)
     EditText myPassword;
-    private Toolbar toolbar;
-    private TextView toolbar_title;
-    private Button button_login, button_regist;
     public static LoginActivity a;
-    private String account;
-    private String password;
-    private String NickName;
-    private int Age;
+    @Bind(R.id.toolbar)
+    Toolbar toolbar;
+    @Bind(R.id.button_regist)
+    Button buttonRegist;
+    @Bind(R.id.button_login)
+    Button buttonLogin;
+    private String Account;
+    private String Password;
+    private String NickName="";
+    private String Age="";
+    private String SessionId;
     private String url;
-    private  mUser user;
+    private String HeadImgUrl="";
+    private mUser user;
     @Bind(R.id.LoginLin)
     LinearLayout LoginLin;
     ProgressDialog dialog;
     CurrentUserSp sp;
-
+    Login login;
+    UserInfo info;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login);
         ButterKnife.bind(this);
+        init();
         initView();
-        sp=new CurrentUserSp(this);
+        sp = new CurrentUserSp(this);
         a = this;
         initPermission();
+    }
+
+    private void init() {
+        login=Login.getInstance();
+        info=login.getInfo();
     }
 
     /**
@@ -90,7 +105,6 @@ public class LoginActivity extends SwipeBackActivity implements View.OnClickList
     }
 
     /**
-     *
      * @param requestCode
      * @param permissions
      * @param grantResults
@@ -105,12 +119,13 @@ public class LoginActivity extends SwipeBackActivity implements View.OnClickList
      * 权限获取成功
      */
     @PermissionSuccess(requestCode = 100)
-    public void getPerMissionSuccess(){
+    public void getPerMissionSuccess() {
         //Snackbar.make(LoginLin,"权限获取成功！",Snackbar.LENGTH_SHORT).show();
     }
+
     @PermissionFail(requestCode = 100)
-    public void getPerMissionFailed(){
-        AlertDialog dialog=new AlertDialog.Builder(LoginActivity.this)
+    public void getPerMissionFailed() {
+        AlertDialog dialog = new AlertDialog.Builder(LoginActivity.this)
                 .setTitle(R.string.lackPermission)
                 .setMessage(R.string.lackPermission_message)
                 .setCancelable(false)
@@ -139,31 +154,17 @@ public class LoginActivity extends SwipeBackActivity implements View.OnClickList
     }
 
     private void initView() {
-        initToolBar();
-        button_regist = (Button) findViewById(R.id.button_regist);
-        button_login = (Button) findViewById(R.id.button_login);
-        button_login.setOnClickListener(this);
-        button_regist.setOnClickListener(this);
-        StatusBarCompat.compat(this, getResources().getColor(R.color.colorPrimaryDark));
+        toolbar.setTitle(R.string.login);
+        setUpToolBar(toolbar, true, true);
+        buttonLogin.setOnClickListener(this);
+        buttonRegist.setOnClickListener(this);
     }
 
-    /*
-    *
-    * */
-    private void initToolBar() {
-        toolbar_title = (TextView) findViewById(R.id.toolbar_title);
-        toolbar_title.setVisibility(View.GONE);
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
-        toolbar.setTitle(R.string.login);
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setHomeButtonEnabled(true);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onBackPressed();
-            }
-        });
+    @Override
+    public void onPanelOpened(View view) {
+        super.onPanelOpened(view);
+        ComUtils.hideInput(LoginActivity.this, LoginLin);
+        finish();
     }
 
     @Override
@@ -171,13 +172,15 @@ public class LoginActivity extends SwipeBackActivity implements View.OnClickList
         super.onDestroy();
         Log.d("test", "xiaohuile");
     }
-    private void showDialog(){
-        dialog=new ProgressDialog(this);
+
+    private void showDialog() {
+        dialog = new ProgressDialog(this);
         dialog.setMessage("登录...");
         dialog.setCancelable(false);
         dialog.show();
     }
-    private void DismissDialog(){
+
+    private void DismissDialog() {
         dialog.dismiss();
     }
 
@@ -185,62 +188,81 @@ public class LoginActivity extends SwipeBackActivity implements View.OnClickList
     /*
     * 获取登录数据
     * */
-    private void getLoginData(){
-        account=myAccount.getText().toString();
-        password=myPassword.getText().toString();
+    private void getLoginData() {
+        Account = myAccount.getText().toString();
+        Password = myPassword.getText().toString();
     }
 
     /*
     * 登录的方法
     * */
-    private void Login(){
-       showDialog();
-       getLoginData();
-        if (!isEmpty()){
-           new Thread(new Runnable() {
-               @Override
-               public void run() {
-                   user=new mUser();
-                   user.setUsername(account);
-                   user.setPassword(password);
-                   Log.d("test",account+password);
-                   user.login(LoginActivity.this, new SaveListener() {
-                       @Override
-                       public void onSuccess() {
-                           getCurrentUser();//得到当前用户
-                           handler.sendEmptyMessage(ConsUtils.LOGIN_SUCCESS);
-
-                       }
-
-                       @Override
-                       public void onFailure(int i, String s) {
-                           handler.sendEmptyMessage(ConsUtils.LOGIN_FAILED);
-                       }
-                   });
-               }
-           }).start();
-        }else{
+    private void Login() {
+        showDialog();
+        getLoginData();
+        if (!isEmpty()) {
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    BeginLogin();
+                }
+            }).start();
+        } else {
             handler.sendEmptyMessage(ConsUtils.EDIT_COMPLETE);
         }
     }
-    Handler handler=new Handler(){
+
+    //beginLogin
+    public void BeginLogin() {
+        JSONObject jsonParam = new JSONObject();
+        try {
+            jsonParam.put("account", Account);
+            jsonParam.put("password", Password);
+            login.UrlLogin(ApiUtils.LoginUrl, jsonParam);
+            login.LoginUpEd();//不可少
+            Log.d("test", String.valueOf(info.isLogin()));
+            if (info.isLogin()) {
+                SessionId = info.getSessionId();
+                getCurrentUserInfo();
+                handler.sendEmptyMessage(ConsUtils.LOGIN_SUCCESS);
+            }else{
+                handler.sendEmptyMessage(ConsUtils.LOGIN_FAILED);
+            }
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    //获取当前用户信息
+    public void getCurrentUserInfo() throws JSONException {
+        JSONObject userInfo = new JSONObject();
+        userInfo.put("account", Account);
+        userInfo.put("sessionID", SessionId);
+        login.getCurrentUserInfo(ApiUtils.GetUserInfoUrl, userInfo);
+        NickName = info.getNickname();
+        Age = info.getAge();
+        Log.d("login", NickName + Age + HeadImgUrl);
+    }
+
+
+    Handler handler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
-            switch (msg.what){
+            switch (msg.what) {
                 case ConsUtils.LOGIN_SUCCESS:
                     DismissDialog();
-                    EventBus.getDefault().post(new MyEventLogin(NickName));
-                    EventBus.getDefault().post(new MyEventLogin(true));
-                    sp.saveCurrentUser(account,NickName,Age,true);
-                    Intent intent=new Intent(LoginActivity.this, MeActivity.class);
-                    intent.putExtra("url",url);
+                    EventBus.getDefault().post(new MyEventLogin(true, NickName));
+                    sp.saveCurrentUser(Account, NickName, Age, true, info.getSessionId());
+                    Intent intent = new Intent(LoginActivity.this, MeActivity.class);
+                    HeadImgUrl=ApiUtils.GetUserImg+Account+".jpg";
+                    intent.putExtra("url", HeadImgUrl);
                     startActivity(intent);
                     finish();
                     break;
                 case ConsUtils.LOGIN_FAILED:
                     DismissDialog();
-                    Snackbar.make(LoginLin,"账号或密码错误",Snackbar.LENGTH_SHORT).show();
+                    Snackbar.make(LoginLin, "登录失败！账号或密码错误", Snackbar.LENGTH_SHORT).show();
                     break;
             }
         }
@@ -249,34 +271,22 @@ public class LoginActivity extends SwipeBackActivity implements View.OnClickList
     /*
     * 判断是否账号密码是否为空
     * */
-    private boolean isEmpty(){
-        return account == null || password == null;
+    private boolean isEmpty() {
+        return Account == null || Password == null;
     }
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()){
+        switch (v.getId()) {
             case R.id.button_regist:
-                Intent intent = new Intent(LoginActivity.this, RegistActivity.class);
+                Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
                 startActivity(intent);
                 break;
             case R.id.button_login:
+                ComUtils.hideInput(this,LoginLin);
                 Login();
                 break;
         }
-    }
-
-
-    /*
-    * bmob的获取当前用户的方法，和Sp一样
-    * */
-    private void getCurrentUser(){
-        mUser user1=BmobUser.getCurrentUser(LoginActivity.this,mUser.class);
-        NickName=user1.getNickName();
-        Age=user1.getAge();
-        account=user1.getUsername();
-        url=user1.getHeadimg();
-        System.out.println("+++++++++"+NickName+"+++++"+Age);
     }
 
 }

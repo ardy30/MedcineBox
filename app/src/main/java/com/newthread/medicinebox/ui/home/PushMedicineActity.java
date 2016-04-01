@@ -6,8 +6,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -23,9 +21,7 @@ import com.jcodecraeer.xrecyclerview.XRecyclerView;
 import com.newthread.medicinebox.Adapter.MyMedicineAdapter;
 import com.newthread.medicinebox.R;
 import com.newthread.medicinebox.bean.RecMedicineBean;
-import com.newthread.medicinebox.theme.StatusBarCompat;
 import com.newthread.medicinebox.ui.activity.SwipeBackActivity;
-import com.newthread.medicinebox.utils.ComUtils;
 import com.newthread.medicinebox.utils.ConsUtils;
 import com.newthread.medicinebox.utils.FindUtils.FindUrlConUtils;
 import com.newthread.medicinebox.utils.JsoupUtils;
@@ -91,8 +87,14 @@ public class PushMedicineActity extends SwipeBackActivity implements View.OnClic
             @Override
             public void run() {
                 String s = urlConUtils.getResult(url);
-                jsoupUtils.ParseMedicines(s, list);
-                handler.sendEmptyMessage(ConsUtils.LOAD_FINISH);
+                Log.d("result", s);
+                if (s!=null){
+                    jsoupUtils.ParseMedicines(s, list);
+                    handler.sendEmptyMessage(ConsUtils.LOAD_FINISH);
+                }else{
+                    handler.sendEmptyMessage(ConsUtils.LOAD_FAILED);
+                }
+
             }
         }).start();
     }
@@ -102,6 +104,7 @@ public class PushMedicineActity extends SwipeBackActivity implements View.OnClic
         toolbar_name = intent.getStringExtra("toolbarname");
         url_code = intent.getStringExtra("urlcode");
         url = "http://www.jianke.com/list-" + url_code + ".html";//010101
+        Log.d("url",url);
     }
 
     private void initView() {
@@ -115,7 +118,8 @@ public class PushMedicineActity extends SwipeBackActivity implements View.OnClic
         medicineFrame.setVisibility(View.VISIBLE);
         progressView.setVisibility(View.VISIBLE);
         initLoad();
-        initToolBar();
+        toolbar.setTitle(toolbar_name);
+        setUpToolBar(toolbar,true,true);
     }
 
 
@@ -138,27 +142,11 @@ public class PushMedicineActity extends SwipeBackActivity implements View.OnClic
                         jsoupUtils.ParseMedicines(urlConUtils.getResult(url),listmore);
                         list.addAll(listmore);
                         Log.d("url",url);
-                        handler.sendEmptyMessage(ConsUtils.LOAD_MORE);
+                        handler.sendEmptyMessage(ConsUtils.LOAD_MORE_FINISH);
                     }
                 }).start();
             }
         });
-    }
-
-    private void initToolBar() {
-        toolbar.setTitle(toolbar_name);
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setHomeButtonEnabled(true);
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
-        if (ComUtils.CheckBuildVision()) {
-            StatusBarCompat.compat(this, getResources().getColor(R.color.colorPrimaryDark));
-        }
     }
 
     Handler handler = new Handler() {
@@ -177,9 +165,13 @@ public class PushMedicineActity extends SwipeBackActivity implements View.OnClic
                     medicinedia.setVisibility(View.GONE);
                     Instruction.setText(instructions);
                     break;
-                case ConsUtils.LOAD_MORE:
+                case ConsUtils.LOAD_MORE_FINISH:
                     xrecyclerview.loadMoreComplete();
                     adapter.notifyDataSetChanged();
+                    break;
+                case ConsUtils.LOAD_FAILED:
+                    progressView.setVisibility(View.GONE);
+                    try_load.setVisibility(View.VISIBLE);
                     break;
             }
         }

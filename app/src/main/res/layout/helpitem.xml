@@ -8,104 +8,140 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
     <android.support.v7.widget.CardView
+        android:background="?android:attr/selectableItemBackground"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="5dp"
         android:layout_marginRight="5dp"
         android:layout_marginTop="5dp"
-        app:cardCornerRadius="3dp"
-        app:cardElevation="10dp">
+        app:cardCornerRadius="5dp"
+        app:elevation="10dp">
      <LinearLayout
          android:layout_margin="5dp"
-         android:orientation="vertical"
-         android:layout_width="match_parent"
-         android:layout_height="wrap_content">
-     <LinearLayout
          android:orientation="horizontal"
          android:layout_width="match_parent"
          android:layout_height="wrap_content">
-     <com.newthread.medicinebox.ui.view.MyCircleImage
-         android:id="@+id/help_head_img"
-         android:src="@drawable/img_login1"
-         android:layout_width="70dp"
-         android:layout_height="70dp" />
      <LinearLayout
-         android:orientation="vertical"
-         android:layout_width="match_parent"
+         android:layout_width="60dp"
          android:layout_height="wrap_content">
-      <TextView
-          android:id="@+id/help_nickname"
-          android:layout_marginStart="10dp"
-          android:textColor="#000"
-          android:textSize="20sp"
-          android:text="Mask浩"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content" />
-         <TextView
-             android:id="@+id/help_time"
-             android:layout_marginStart="10dp"
-             android:textColor="#000"
-             android:textSize="20sp"
-             android:text="2016-2-19"
-             android:layout_width="wrap_content"
-             android:layout_height="wrap_content" />
-     </LinearLayout>
-     </LinearLayout>
-         <View
-             android:layout_marginTop="5dp"
-             android:background="@color/colorgray"
+         <com.github.siyamed.shapeimageview.RoundedImageView
              android:layout_width="match_parent"
-             android:layout_height="1dp"/>
-     <LinearLayout
-         android:orientation="vertical"
-         android:layout_width="match_parent"
-         android:layout_height="wrap_content">
-         <TextView
-             android:id="@+id/help_topic"
-             android:layout_marginStart="10dp"
-             android:textColor="#000"
-             android:textSize="20sp"
-             android:text=""
-             android:layout_width="wrap_content"
-             android:layout_height="wrap_content" />
-         <TextView
-             android:id="@+id/help_content"
-             android:layout_marginStart="10dp"
-             android:textColor="#000"
-             android:textSize="20sp"
-             android:text=""
-             android:layout_width="wrap_content"
-             android:layout_height="wrap_content" />
+             android:layout_height="match_parent"
+             android:id="@+id/post_head_img"
+             android:src="@drawable/img_login1"
+             app:siRadius="6dp"
+             app:siBorderWidth="0dp"
+             app:siBorderColor="@color/colorAccent1"
+             app:siSquare="true"/>
      </LinearLayout>
-     <View
-         android:layout_marginTop="5dp"
-         android:background="@color/colorgray"
-         android:layout_width="match_parent"
-         android:layout_height="1dp"/>
-     <LinearLayout
-         android:layout_gravity="center"
-         android:orientation="horizontal"
-         android:layout_margin="10dp"
-         android:layout_width="match_parent"
-         android:layout_height="36dp">
-     <ImageView
-        android:layout_gravity="left|center"
-         android:src="@drawable/img_zhuangfa"
-         android:layout_width="32dp"
-         android:layout_height="32dp" />
-         <ImageView
-             android:layout_marginStart="20dp"
-             android:layout_gravity="center"
-             android:src="@drawable/img_zan"
-             android:layout_width="32dp"
-             android:layout_height="32dp" />
-         <ImageView
-             android:layout_gravity="center"
-             android:layout_marginStart="20dp"
-             android:src="@drawable/img_comment"
-             android:layout_width="32dp"
-             android:layout_height="32dp" />
-     </LinearLayout>
+    <LinearLayout
+        android:layout_marginStart="5dp"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <TextView
+            android:id="@+id/post_nickname"
+            android:textColor="#000"
+            android:textSize="20sp"
+            android:text="Mask浩"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+        <TextView
+            android:gravity="right"
+            android:id="@+id/post_time"
+            android:layout_marginStart="10dp"
+            android:textColor="#000"
+            android:textSize="20sp"
+            android:text="2016-2-19"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+        <LinearLayout
+            android:layout_marginTop="10dp"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <TextView
+                android:id="@+id/post_topic"
+                android:textColor="#009688"
+                android:text=""
+                android:textSize="20sp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+            <TextView
+                android:text=""
+                android:id="@+id/post_contents"
+                android:textSize="20sp"
+                android:textColor="#000"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+        <LinearLayout
+            android:layout_marginTop="5dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+         <android.support.v7.widget.RecyclerView
+             android:id="@+id/post_images_recyclerview"
+             android:layout_width="match_parent"
+             android:layout_height="wrap_content"/>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_marginTop="10dp"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <LinearLayout
+                android:id="@+id/lin_zhuangfa"
+                android:clickable="true"
+                android:layout_width="3dp"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:layout_height="match_parent">
+                <ImageView
+                    android:scaleType="fitCenter"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:src="@drawable/img_zhuangfa"
+                    />
+            </LinearLayout>
+            <LinearLayout
+                android:id="@+id/lin_like"
+                android:clickable="true"
+                android:layout_width="3dp"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:layout_height="match_parent">
+                <ImageView
+                    android:id="@+id/post_zan"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/img_like"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    />
+            </LinearLayout>
+            <LinearLayout
+                android:id="@+id/lin_comment"
+                android:clickable="true"
+                android:layout_width="3dp"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:layout_height="match_parent">
+                <ImageView
+                    android:scaleType="fitCenter"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:src="@drawable/img_comment"
+                    />
+            </LinearLayout>
+        </LinearLayout>
+
+    </LinearLayout>
      </LinearLayout>
     </android.support.v7.widget.CardView>
 </LinearLayout>

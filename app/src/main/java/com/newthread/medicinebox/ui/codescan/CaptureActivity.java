@@ -7,6 +7,8 @@ import android.support.v7.app.AppCompatActivity;
 import com.dtr.zbar.build.ZBarDecoder;
 import com.newthread.medicinebox.R;
 import com.newthread.medicinebox.theme.StatusBarCompat;
+import com.newthread.medicinebox.ui.activity.BaseActivity;
+import com.newthread.medicinebox.utils.ComUtils;
 import com.newthread.medicinebox.utils.ConsUtils;
 /**
  * Created by 张浩 on 2016/1/30.
@@ -31,7 +33,7 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
-public class CaptureActivity extends AppCompatActivity {
+public class CaptureActivity extends BaseActivity {
     private Camera mCamera;
     private CameraPreview mPreview;
     private Handler autoFocusHandler;
@@ -125,7 +127,9 @@ public class CaptureActivity extends AppCompatActivity {
     }
 
     private void initViews() {
-        StatusBarCompat.compat(CaptureActivity.this,getResources().getColor(R.color.colorPrimaryDark));
+        if (ComUtils.CheckBuildVision()){
+            StatusBarCompat.compat(CaptureActivity.this,getResources().getColor(R.color.colorPrimaryDark));
+        }
         autoFocusHandler = new Handler();
         mCameraManager = new CameraManager(this);
         try {

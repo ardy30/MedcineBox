@@ -4,7 +4,7 @@
     android:id="@+id/LoginLin"
     android:layout_height="match_parent">
 <include
-    layout="@layout/toolbar_include"/>
+    layout="@layout/toolbar_normal"/>
     <LinearLayout
         android:layout_margin="20dp"
         android:orientation="vertical"

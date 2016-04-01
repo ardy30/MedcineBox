@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.design.widget.Snackbar;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -36,7 +35,7 @@ import de.greenrobot.event.EventBus;
  * 注册Activity
  * Created by 张浩 on 2016/1/20.
  */
-public class RegistActivity extends SwipeBackActivity {
+public class RegisterActivityBmob extends SwipeBackActivity {
     @Bind(R.id.my_account)
     EditText myAccount;
     @Bind(R.id.my_name)
@@ -111,7 +110,7 @@ public class RegistActivity extends SwipeBackActivity {
     * */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_regist, menu);
+        getMenuInflater().inflate(R.menu.menu_done, menu);
         return true;
     }
 
@@ -163,12 +162,12 @@ public class RegistActivity extends SwipeBackActivity {
             super.handleMessage(msg);
             switch (msg.what){
                 case ConsUtils.SIGN_UP_SUCCESS:
-                    sp.saveCurrentUser(account,NickName,0,true);
+                    sp.saveCurrentUser(account,NickName,"",true,"");
                     EventBus.getDefault().post(new MyEventLogin(NickName));
                    /* MainActivity.head_tips.setVisibility(View.GONE);
                     MainActivity.head_name.setText(NickName);*/
                     DismissDia();
-                    LoginActivity.a.finish();
+                    LoginActivityBmob.a.finish();
                     finish();
                     break;
                 case ConsUtils.EDIT_COMPLETE:

@@ -3,7 +3,7 @@
     xmlns:slideswitch="http://schemas.android.com/apk/res-auto"
     android:orientation="horizontal"
     android:padding="16dp"
-    android:background="@drawable/onpressrecylerview"
+    android:background="?android:attr/selectableItemBackground"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
     <TextView

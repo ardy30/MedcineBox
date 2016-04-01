@@ -7,7 +7,6 @@ import android.os.Message;
 import android.speech.RecognizerIntent;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -23,11 +22,13 @@ import com.miguelcatalan.materialsearchview.MaterialSearchView;
 import com.newthread.medicinebox.Adapter.SearchAdapter;
 import com.newthread.medicinebox.R;
 import com.newthread.medicinebox.bean.MedicineBean;
+import com.newthread.medicinebox.theme.StatusBarCompat;
 import com.newthread.medicinebox.ui.activity.SwipeBackActivity;
 import com.newthread.medicinebox.utils.ApiUtils;
+import com.newthread.medicinebox.utils.ComUtils;
 import com.newthread.medicinebox.utils.ConsUtils;
 import com.newthread.medicinebox.utils.HttpUtils.UrlConnectionUtils;
-import com.newthread.medicinebox.utils.JsonHelper;
+import com.newthread.medicinebox.utils.JsonUtils.JsonHelper;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -47,9 +48,11 @@ public class SearchMedicineActivity extends SwipeBackActivity {
     @Bind(R.id.search_recycler)
     RecyclerView searchRecycler;
     JSONObject object;
-    ArrayList<MedicineBean> list;
+    ArrayList<MedicineBean> mList;
     @Bind(R.id.search_progress)
     FrameLayout searchProgress;
+    @Bind(R.id.NoSearchResult)
+    FrameLayout NoResultTips;
     SearchAdapter adapter;
     @Bind(R.id.search_view)
     MaterialSearchView searchView;
@@ -58,7 +61,8 @@ public class SearchMedicineActivity extends SwipeBackActivity {
     @Bind(R.id.container)
     CoordinatorLayout container;
     String[] a = {"1111", "22222"};
-
+    JsonHelper helper;
+    MedicineBean bean;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,13 +82,14 @@ public class SearchMedicineActivity extends SwipeBackActivity {
                 try {
                     name = URLEncoder.encode(query, "utf-8");
                     String url = ApiUtils.SearchUrl + name;
-                    if (list == null) {
+                    Log.d("urltest",url);
+                    if (mList == null) {
                         Log.d("query", query);
                         getData(url);
                     } else {
-                        Log.d("size", String.valueOf(list.size()));
-                        adapter.notifyItemRangeRemoved(0, list.size());
-                        list.clear();
+                        Log.d("size", String.valueOf(mList.size()));
+                        adapter.notifyItemRangeRemoved(0, mList.size());
+                        mList.clear();
                         getData(url);
                     }
 
@@ -119,6 +124,9 @@ public class SearchMedicineActivity extends SwipeBackActivity {
 
 
     private void initToolBar() {
+        if (ComUtils.CheckBuildVision()){
+            StatusBarCompat.compat(SearchMedicineActivity.this,getResources().getColor(R.color.colorPrimaryDark));
+        }
         searchToolbar.setTitle(R.string.searchmedicine);
         setSupportActionBar(searchToolbar);
     }
@@ -126,7 +134,6 @@ public class SearchMedicineActivity extends SwipeBackActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_search, menu);
-
         MenuItem item = menu.findItem(R.id.action_search);
         searchView.setMenuItem(item);
         return true;
@@ -153,26 +160,42 @@ public class SearchMedicineActivity extends SwipeBackActivity {
     * 查询药品
     * */
     private void getData(final String url) {
+        NoResultTips.setVisibility(View.GONE);
         searchProgress.setVisibility(View.VISIBLE);
-        final JsonHelper helper = new JsonHelper();
         new Thread(new Runnable() {
             @Override
             public void run() {
                 String result = UrlConnectionUtils.getResult(url);
-                try {
-                    if (result != null) {
-                        object = UrlConnectionUtils.getJSON(result);
-                        list = helper.getMedicineSearchInfo(object);
-                        adapter = new SearchAdapter(SearchMedicineActivity.this, list);
-                    } else {
-                        Snackbar.make(container,"网络异常！",Snackbar.LENGTH_SHORT).show();
+                if (result != null) {
+                    try {
+                        SearchResult(result);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
                     }
-                } catch (JSONException e) {
-                    e.printStackTrace();
+                } else {
+                    handler.sendEmptyMessage(ConsUtils.BAD_NETWORK);
+
                 }
-                handler.sendEmptyMessage(ConsUtils.LOAD_FINISH);
+
             }
         }).start();
+    }
+
+    public void SearchResult(String result) throws JSONException {
+        helper=JsonHelper.getInstance();
+        object = UrlConnectionUtils.getJSON(result);
+        helper.getMedicineSearchInfo(object, new JsonHelper.OnSearchListener() {
+            @Override
+            public void onSuccess(ArrayList<MedicineBean> list) {
+                mList=list;
+                adapter = new SearchAdapter(SearchMedicineActivity.this, list);
+                handler.sendEmptyMessage(ConsUtils.LOAD_FINISH);
+            }
+            @Override
+            public void onError(String error) {
+                handler.sendEmptyMessage(ConsUtils.NO_SEARCH_RESULT);
+            }
+        });
     }
 
     Handler handler = new Handler() {
@@ -182,6 +205,14 @@ public class SearchMedicineActivity extends SwipeBackActivity {
             switch (msg.what) {
                 case ConsUtils.LOAD_FINISH:
                     searchRecycler.setAdapter(adapter);
+                    searchProgress.setVisibility(View.GONE);
+                    break;
+                case ConsUtils.NO_SEARCH_RESULT:
+                    searchProgress.setVisibility(View.GONE);
+                    NoResultTips.setVisibility(View.VISIBLE);
+                    break;
+                case ConsUtils.BAD_NETWORK:
+                    Snackbar.make(container,"网络异常！",Snackbar.LENGTH_SHORT).show();
                     searchProgress.setVisibility(View.GONE);
                     break;
             }

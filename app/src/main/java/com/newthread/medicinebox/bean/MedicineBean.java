@@ -59,4 +59,23 @@ public class MedicineBean {
     private String Sympthon;
     private String size;
     private String consume;
+
+    public String getSearchCode() {
+        return searchCode;
+    }
+
+    public void setSearchCode(String searchCode) {
+        this.searchCode = searchCode;
+    }
+
+    private String searchCode;
+    public boolean isSearch() {
+        return search;
+    }
+
+    public void setSearch(boolean search) {
+        this.search = search;
+    }
+
+    private boolean search=false;
 }

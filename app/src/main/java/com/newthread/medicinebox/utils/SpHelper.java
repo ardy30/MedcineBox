@@ -15,11 +15,11 @@ public class SpHelper {
         editor=context.getSharedPreferences("ImgUrl",Context.MODE_PRIVATE).edit();
         preferences=context.getSharedPreferences("ImgUrl", Context.MODE_PRIVATE);
     }
-    public SpHelper(Context context,String spName){
-        this.context=context;
-        editor=context.getSharedPreferences(spName,Context.MODE_PRIVATE).edit();
-        preferences=context.getSharedPreferences(spName, Context.MODE_PRIVATE);
-    }
+//    public SpHelper(Context context,String spName){
+//        this.context=context;
+//        editor=context.getSharedPreferences(spName,Context.MODE_PRIVATE).edit();
+//        preferences=context.getSharedPreferences(spName, Context.MODE_PRIVATE);
+//    }
     /*
     * saveImgList
     * */

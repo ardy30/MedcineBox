@@ -7,7 +7,6 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -18,14 +17,12 @@ import android.widget.TextView;
 import com.android.volley.toolbox.NetworkImageView;
 import com.newthread.medicinebox.R;
 import com.newthread.medicinebox.bean.MedicineBean;
-import com.newthread.medicinebox.theme.StatusBarCompat;
 import com.newthread.medicinebox.ui.activity.SwipeBackActivity;
 import com.newthread.medicinebox.ui.remind.AddRemindActivity;
-import com.newthread.medicinebox.utils.ComUtils;
+import com.newthread.medicinebox.utils.ApiUtils;
 import com.newthread.medicinebox.utils.ConsUtils;
 import com.newthread.medicinebox.utils.HttpUtils.UrlConnectionUtils;
-import com.newthread.medicinebox.utils.JsonHelper;
-import com.newthread.medicinebox.utils.ApiUtils;
+import com.newthread.medicinebox.utils.JsonUtils.JsonHelper;
 import com.newthread.medicinebox.utils.NetWorkImageUtils.VolleyImageCacheManager;
 
 import org.json.JSONException;
@@ -56,7 +53,8 @@ public class ScanResultActivity extends SwipeBackActivity {
     FrameLayout qrProgress;
     @Bind(R.id.coordinatorLayout_qr)
     CoordinatorLayout coordinatorLayout;
-    private Toolbar toolbar;
+    @Bind(R.id.QrScan_toolbar)
+    Toolbar QrScanToolbar;
     private Intent intent;
     private String url;
     private JSONObject MedicineJson;
@@ -96,25 +94,8 @@ public class ScanResultActivity extends SwipeBackActivity {
     }
 
     private void initView() {
-        initToolBar();
-    }
-
-    private void initToolBar() {
-        toolbar = (Toolbar) findViewById(R.id.QrScan_toolbar);
-        toolbar.setTitle(R.string.scanresult);
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setHomeButtonEnabled(true);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
-        if (ComUtils.CheckBuildVision()){
-            coordinatorLayout.setFitsSystemWindows(false);
-            StatusBarCompat.compat(ScanResultActivity.this,getResources().getColor(R.color.colorPrimaryDark));
-        }
+        QrScanToolbar.setTitle(R.string.scanresult);
+        setUpToolBar(QrScanToolbar, true, true);
     }
 
 
@@ -124,7 +105,7 @@ public class ScanResultActivity extends SwipeBackActivity {
             super.handleMessage(msg);
             switch (msg.what) {
                 case ConsUtils.PARSE_FINISH:
-                    qrMedicineImg.setImageUrl(ApiUtils.imgUrl+list.get(0).getImageurl(), VolleyImageCacheManager.
+                    qrMedicineImg.setImageUrl(ApiUtils.imgUrl + list.get(0).getImageurl(), VolleyImageCacheManager.
                             getInstance().getImageLoader());
                     qrMedicinename.setText("【药品名称】" + list.get(0).getName());
                     qrMedicineSympton.setText("【主治功能】" + list.get(0).getConsume());
@@ -137,15 +118,15 @@ public class ScanResultActivity extends SwipeBackActivity {
         }
     };
 
-    private void showDialog(){
-        AlertDialog dialog=new AlertDialog.Builder(this)
+    private void showDialog() {
+        AlertDialog dialog = new AlertDialog.Builder(this)
                 .setTitle("添加")
                 .setMessage("是否添加用药提醒")
                 .setPositiveButton("确定", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        Intent intent=new Intent(ScanResultActivity.this,AddRemindActivity.class);
-                        intent.putExtra("medicine",list.get(0).getName());
+                        Intent intent = new Intent(ScanResultActivity.this, AddRemindActivity.class);
+                        intent.putExtra("medicine", list.get(0).getName());
                         startActivity(intent);
                         dialog.dismiss();
                         finish();
@@ -162,14 +143,14 @@ public class ScanResultActivity extends SwipeBackActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.add,menu);
+        getMenuInflater().inflate(R.menu.add, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
-        switch (item.getItemId()){
+        switch (item.getItemId()) {
             case R.id.menu_add:
                 showDialog();
                 break;

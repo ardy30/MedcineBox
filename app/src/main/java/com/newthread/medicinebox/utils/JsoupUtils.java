@@ -38,7 +38,8 @@ public class JsoupUtils {
             for (int j=0;j<lableElements.size();j++){
                lable=lableElements.get(1).select("a").text();
             }
-            dataUtils.setDataBean(list,title,content,detail_url,img_url,date,lable);
+           System.out.println("imagurl----------------"+img_url);
+            dataUtils.setDataBean(list, title, content, detail_url, img_url, date, lable);
         }
 
     }
@@ -66,11 +67,11 @@ public class JsoupUtils {
         Document doc=Jsoup.parse(s,"utf-8");
         Element element=doc.getElementsByClass("play").first().getElementsByTag("ul").first();
         Elements elements=element.getElementsByTag("li");
-        Log.d("size",String.valueOf(elements.size()));
+        Log.d("sizeImg",String.valueOf(elements.size()));
         list=new ArrayList<>();
         for (int i=0;i<elements.size();i++){
             String img_url=elements.get(i).getElementsByClass("jk_1210").attr("src");
-           // Log.d("imgurl",img_url);
+             Log.d("imgurl",img_url);
             list.add(img_url);
         }
         return list;
@@ -82,7 +83,7 @@ public class JsoupUtils {
     public void ParseMedicines(String s,ArrayList<RecMedicineBean> list){
         HomeDataUtils dataUtils=new HomeDataUtils();
         Document doc=Jsoup.parse(s,"utf-8");
-        Element element=doc.getElementsByClass("main").first().getElementsByClass("pro-con").first();
+        Element element=doc.getElementsByClass("main").first().getElementsByClass("pro-area").first().getElementsByClass("pro-con").first();
         Elements elements=element.getElementsByTag("li");
         for (int i=0;i<elements.size();i++){
             String medicineimg=elements.get(i).getElementsByClass("imgbig").select("img").attr("src");

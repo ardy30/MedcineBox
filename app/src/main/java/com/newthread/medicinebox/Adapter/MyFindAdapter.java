@@ -2,9 +2,11 @@ package com.newthread.medicinebox.Adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.URLUtil;
 import android.widget.TextView;
 
 import com.android.volley.toolbox.NetworkImageView;
@@ -70,13 +72,19 @@ public class  MyFindAdapter extends RecyclerView.Adapter <RecyclerView.ViewHolde
             ((ItemViewHolder)holder).list_content.setText(list_content);
             ((ItemViewHolder)holder).date.setText(date);
             ((ItemViewHolder)holder).lable.setText("标签:" + lable);
-            ((ItemViewHolder)holder).imageView.setImageUrl(img_url, VolleyImageCacheManager.getInstance().getImageLoader());
+            if (URLUtil.isHttpUrl(img_url)){
+                ((ItemViewHolder) holder).imageView.setImageUrl(img_url, VolleyImageCacheManager.getInstance().getImageLoader());
+            }else{
+                ((ItemViewHolder)holder).imageView.setDefaultImageResId(R.drawable.ic_default_adimage);
+                ((ItemViewHolder)holder).imageView.setErrorImageResId(R.drawable.ic_default_adimage);
+            }
+
             if(onItemClickListener!=null){
                 holder.itemView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        int pos=holder.getLayoutPosition();
-                        onItemClickListener.onItemClick(holder.itemView,pos);
+                        int pos = holder.getLayoutPosition();
+                        onItemClickListener.onItemClick(holder.itemView, pos);
                     }
                 });
 

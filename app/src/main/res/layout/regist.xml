@@ -4,9 +4,9 @@
     android:id="@+id/SignUpLin"
     android:layout_height="match_parent">
 <include
-    layout="@layout/toolbar_include"/>
+    layout="@layout/toolbar_normal"/>
     <ScrollView
-        android:layout_margin="20dp"
+        android:layout_margin="10dp"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
     <LinearLayout
@@ -34,6 +34,7 @@
             android:theme="@style/myEditTheme"
             >
             <EditText
+
                 android:id="@+id/my_name"
                 android:lines="1"
                 android:layout_width="match_parent"
@@ -48,6 +49,7 @@
             android:theme="@style/myEditTheme"
             >
             <EditText
+
                 android:id="@+id/my_password"
                 android:lines="1"
                 android:layout_width="match_parent"

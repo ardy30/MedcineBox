@@ -106,7 +106,7 @@ public class FindFragment extends Fragment implements SwipeRefreshLayout.OnRefre
                 listmore=new ArrayList<>();
                 urlConUtils = new FindUrlConUtils();
                 urlConUtils.getListResult(url, listmore);
-                handler.sendEmptyMessage(ConsUtils.LOAD_MORE);
+                handler.sendEmptyMessage(ConsUtils.LOAD_MORE_FINISH);
             }
         }).start();
 
@@ -220,7 +220,7 @@ public class FindFragment extends Fragment implements SwipeRefreshLayout.OnRefre
                     recyclerView.removeAllViews();
                     recyclerView.setAdapter(adapter);
                     break;
-                case ConsUtils.LOAD_MORE:
+                case ConsUtils.LOAD_MORE_FINISH:
                     list.addAll(listmore);
                     Log.d("item", String.valueOf(adapter.getItemCount()));
                     adapter.notifyDataSetChanged();

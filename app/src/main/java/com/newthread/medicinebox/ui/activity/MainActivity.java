@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.support.design.widget.CoordinatorLayout;
@@ -17,7 +16,6 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Gravity;
@@ -25,39 +23,33 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import com.newthread.medicinebox.R;
-import com.newthread.medicinebox.theme.StatusBarCompat;
 import com.newthread.medicinebox.ui.Fragment.BackHandledFragment;
 import com.newthread.medicinebox.ui.Fragment.HomeFragment;
 import com.newthread.medicinebox.ui.Fragment.LoginFragment;
 import com.newthread.medicinebox.ui.codescan.CaptureActivity;
 import com.newthread.medicinebox.ui.find.FindFragment;
-import com.newthread.medicinebox.ui.help.HelpFragment;
+import com.newthread.medicinebox.ui.help.PostFragment;
 import com.newthread.medicinebox.ui.history.HistoryFragment;
 import com.newthread.medicinebox.ui.home.SearchMedicineActivity;
 import com.newthread.medicinebox.ui.remind.MyRemindListActivity;
 import com.newthread.medicinebox.ui.remind.Remind;
 import com.newthread.medicinebox.ui.user.LoginActivity;
 import com.newthread.medicinebox.ui.user.MeActivity;
-import com.newthread.medicinebox.ui.view.CircleImage;
 import com.newthread.medicinebox.utils.BitmapUtils;
 import com.newthread.medicinebox.utils.ComUtils;
 import com.newthread.medicinebox.utils.ConsUtils;
 import com.newthread.medicinebox.utils.FileUtils;
 import com.newthread.medicinebox.utils.EventBusUtils.MyEventLogin;
 import com.newthread.medicinebox.utils.AlarmUtils.RemindUtils;
-import com.newthread.medicinebox.utils.NetWorkImageUtils.BitmapLruCache;
-import com.newthread.medicinebox.utils.PermissionsChecker;
 import com.newthread.medicinebox.utils.SpUtils.SpFirst;
 import com.newthread.medicinebox.utils.UserUtils.CurrentUserSp;
 import com.newthread.medicinebox.utils.NetWorkImageUtils.HeadImageHelper;
 import org.litepal.tablemanager.Connector;
 import java.util.ArrayList;
 import java.util.Map;
-import java.util.zip.Inflater;
 
 import de.greenrobot.event.EventBus;
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -65,7 +57,7 @@ import kr.co.namee.permissiongen.PermissionFail;
 import kr.co.namee.permissiongen.PermissionGen;
 import kr.co.namee.permissiongen.PermissionSuccess;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener {
+public class MainActivity extends BaseActivity implements View.OnClickListener {
     private Toolbar toolbar;
     private CoordinatorLayout coordinatorLayout;
     private BackHandledFragment selectedFragment;
@@ -77,7 +69,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private CircleImageView headImage;
     public  TextView head_name,head_tips;
     private String nickname;
-    private int age;
+    private String age;
     private String url_HeadImg;
     CurrentUserSp sp;
     FragmentManager fragmentManager;
@@ -153,9 +145,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         if (initLoginState()){
             intent=new Intent(MainActivity.this, MeActivity.class);
             startActivity(intent);
+            drawerLayout.closeDrawers();
         }else {
          intent=new Intent(MainActivity.this,LoginActivity.class);
             startActivity(intent);
+            drawerLayout.closeDrawers();
         }
     }
     /*
@@ -184,8 +178,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     * 初始化控件
     * */
     private void initView() {
-        initToolBar();
-
+        toolbar= (Toolbar) findViewById(R.id.toolbar);
+        toolbar.setTitle("");
+        setUpToolBar(toolbar, true, true);
         coordinatorLayout= (CoordinatorLayout) findViewById(R.id.main_content);
         toolbar_title= (TextView) findViewById(R.id.toolbar_title);
         drawerLayout= (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -194,7 +189,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         toggle.syncState();
         drawerLayout.addDrawerListener(toggle);
         if (ComUtils.CheckBuildVision()){
-            drawerLayout.setFitsSystemWindows(true);
+            drawerLayout.setFitsSystemWindows(false);
             //drawerLayout.setStatusBarBackground(R.color.colorPrimaryDark);
         }
         setupDrawerContent(navigationView);
@@ -222,16 +217,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             public boolean onNavigationItemSelected(MenuItem menuItem) {
                 switch (menuItem.getItemId()) {
                     case R.id.navigation_item_home:
-                        switchtoHome();
+                        switchToHome();
                         break;
                     case R.id.navigation_item_find:
-                        switchtoFind();
+                        switchToFind();
                         break;
                     case R.id.navigation_item_history:
-                        switchtoHistory();
+                        switchToHistory();
                         break;
                     case R.id.navigation_item_help:
-                        switchtoHelp();
+                        switchToHelp();
                         break;
                     case R.id.navigation_item_QR_scan:
                         initPermission();
@@ -239,8 +234,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     case R.id.navigation_item_search:
                         startActivity(new Intent(MainActivity.this, SearchMedicineActivity.class));
                         break;
+                    case R.id.navigation_item_setting:
+                        startActivity(new Intent(MainActivity.this,SettingActivity.class));
+                        break;
                     default:
-                        startActivity(new Intent(MainActivity.this,DeveloperActivity.class));
+                        startActivity(new Intent(MainActivity.this, DeveloperActivity.class));
                         break;
                 }
                 menuItem.setChecked(true);
@@ -337,7 +335,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case 2:
                 if (sp.getLoginState()){
                     if (HelpFragment==null){
-                        HelpFragment=new HelpFragment();
+                        HelpFragment=new PostFragment();
                         transaction.add(R.id.frame_content,HelpFragment);
                     }else{
                         transaction.show(HelpFragment);
@@ -389,7 +387,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     /*
     * 历史
     * */
-    private void switchtoHistory() {
+    private void switchToHistory() {
         setSelectedFragment(3);
         toolbar_title.setVisibility(View.GONE);
         toolbar.setTitle(R.string.navigation_history);
@@ -398,7 +396,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     /*
     * 发现
     * */
-    private void switchtoFind() {
+    private void switchToFind() {
         setSelectedFragment(1);
         toolbar_title.setVisibility(View.GONE);
         toolbar.setTitle(R.string.navigation_find);
@@ -407,7 +405,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     /*
     *首页
     * */
-    private void switchtoHome() {
+    private void switchToHome() {
         setSelectedFragment(0);
         toolbar_title.setVisibility(View.VISIBLE);
         toolbar.setTitle("");
@@ -416,7 +414,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     /*
     * 帮助
     * */
-    private void switchtoHelp() {
+    private void switchToHelp() {
         setSelectedFragment(2);
         toolbar_title.setVisibility(View.GONE);
         toolbar.setTitle(R.string.navigation_help);
@@ -427,23 +425,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     * */
     private void switchtoHomeBegin() {
         setSelectedFragment(0);
-    }
-
-    /*
-    * 初始化Toolbar
-    * */
-    private void initToolBar() {
-        toolbar= (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setHomeButtonEnabled(true);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setDisplayShowTitleEnabled(false);
-        if (Build.VERSION.SDK_INT<21){
-            StatusBarCompat.compat(this,getResources().getColor(R.color.colorPrimaryDark));
-        }else{
-//            StatusBarCompat.compat(this);
-        }
-
     }
 
     @Override
@@ -462,7 +443,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                startActivity(intent);
                break;
            case R.id.message:
-               switchtoHelp();
+               switchToHelp();
                break;
        }
 
@@ -496,7 +477,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     headImage.setImageResource(event.getResId());
                     Log.d("id", String.valueOf(event.getResId()));
                 }
-
             }else{
                 head_name.setText(nickname);
                 head_tips.setVisibility(View.GONE);
@@ -536,4 +516,5 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
 
     }
+
 }

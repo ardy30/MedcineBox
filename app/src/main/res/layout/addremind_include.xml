@@ -14,7 +14,7 @@
         android:id="@+id/set_time"
         android:gravity="center"
         android:clickable="true"
-        android:background="@drawable/onpress"
+        android:background="?android:attr/selectableItemBackground"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <TextView
@@ -74,7 +74,7 @@
     <RelativeLayout
         android:id="@+id/chooseRingtone"
         android:clickable="true"
-        android:background="@drawable/onpress"
+        android:background="?android:attr/selectableItemBackground"
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="50dp">
@@ -113,7 +113,7 @@
         android:layout_height="1dp"/>
     <RelativeLayout
         android:orientation="horizontal"
-        android:background="@drawable/onpress"
+        android:background="?android:attr/selectableItemBackground"
         android:layout_width="match_parent"
         android:layout_height="50dp">
         <TextView

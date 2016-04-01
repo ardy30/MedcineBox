@@ -11,8 +11,8 @@ import android.view.ViewGroup;
 import android.widget.Button;
 
 import com.newthread.medicinebox.R;
-import com.newthread.medicinebox.ui.user.LoginActivity;
-import com.newthread.medicinebox.ui.user.RegistActivity;
+import com.newthread.medicinebox.ui.user.LoginActivityBmob;
+import com.newthread.medicinebox.ui.user.RegisterActivityBmob;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -39,13 +39,13 @@ public class LoginFragment extends Fragment {
         buttonLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(getContext(), LoginActivity.class));
+                startActivity(new Intent(getContext(), LoginActivityBmob.class));
             }
         });
         buttonRegist.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(getContext(), RegistActivity.class));
+                startActivity(new Intent(getContext(), RegisterActivityBmob.class));
             }
         });
     }

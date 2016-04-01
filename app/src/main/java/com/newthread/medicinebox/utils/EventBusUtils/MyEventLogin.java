@@ -23,8 +23,9 @@ public class MyEventLogin {
         nickname=name;
         ResId=id;
     }
-    public MyEventLogin(boolean Login){
+    public MyEventLogin(boolean Login,String name){
         isLogin=Login;
+        nickname=name;
     }
     public String getName(){
         return nickname;

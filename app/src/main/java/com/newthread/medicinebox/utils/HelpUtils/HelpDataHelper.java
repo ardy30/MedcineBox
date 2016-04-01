@@ -25,32 +25,32 @@ public class HelpDataHelper {
         this.context=context;
         user= BmobUser.getCurrentUser(context,mUser.class);
     }
-    public void getHelpData(final ArrayList<Map<String,Object>> HelpLists){
-        BmobQuery<HelpBean> query=new BmobQuery<>();
-        query.findObjects(context, new FindListener<HelpBean>() {
-            @Override
-            public void onSuccess(List<HelpBean> list) {
-                for (HelpBean bean:list){
-                    Map<String ,Object> map=new HashMap<>();
-                    map.put("medicine",bean.getMedicine());
-                    map.put("question",bean.getQuestion());
-                    map.put("time",bean.getUpdatedAt());
-                   // map.put("usename",bean.getUsername());
-                    HelpLists.add(map);
-                 /*   System.out.println("-----------------------");
-                    System.out.println(HelpLists);
-                    System.out.println(HelpLists.size());*/
-                }
-
-
-            }
-
-            @Override
-            public void onError(int i, String s) {
-                Log.d("error",s);
-            }
-        });
-    }
+//    public void getHelpData(final ArrayList<Map<String,Object>> HelpLists){
+//        BmobQuery<HelpBean> query=new BmobQuery<>();
+//        query.findObjects(context, new FindListener<HelpBean>() {
+//            @Override
+//            public void onSuccess(List<HelpBean> list) {
+//                for (HelpBean bean:list){
+//                    Map<String ,Object> map=new HashMap<>();
+//                    map.put("medicine",bean.getMedicine());
+//                    map.put("question",bean.getQuestion());
+//                    map.put("time",bean.getUpdatedAt());
+//                   // map.put("usename",bean.getUsername());
+//                    HelpLists.add(map);
+//                 /*   System.out.println("-----------------------");
+//                    System.out.println(HelpLists);
+//                    System.out.println(HelpLists.size());*/
+//                }
+//
+//
+//            }
+//
+//            @Override
+//            public void onError(int i, String s) {
+//                Log.d("error",s);
+//            }
+//        });
+//    }
 
 
 

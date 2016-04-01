@@ -1,33 +1,50 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.design.widget.CoordinatorLayout
-    android:id="@+id/recycler"
+    android:id="@+id/coordinatlayout_post"
     android:background="@color/colorRecylerview"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-  <FrameLayout
-      android:id="@+id/help_progress"
-      android:layout_width="match_parent"
-      android:layout_height="match_parent">
-      <com.github.rahatarmanahmed.cpv.CircularProgressView
-          android:id="@+id/progress_view"
-          android:layout_gravity="center"
-          android:layout_width="80dp"
-          android:layout_height="80dp"
-          android:layout_centerHorizontal="true"
-          android:layout_centerVertical="true"
-          android:padding="0dp"
-          app:cpv_animAutostart="true"
-          app:cpv_indeterminate="true"
-          app:cpv_thickness="4dp" />
-  </FrameLayout>
+    <FrameLayout
+        android:id="@+id/help_progress"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <LinearLayout
+            android:id="@+id/try_load_help"
+            android:orientation="vertical"
+            android:layout_gravity="center"
+            android:clickable="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+            <ImageView
+                android:layout_gravity="center"
+                android:src="@drawable/img_nonetwork"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+            <TextView
+                android:text="@string/no_network"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+        <com.github.rahatarmanahmed.cpv.CircularProgressView
+            android:id="@+id/progress_view_help"
+            android:layout_gravity="center"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:padding="0dp"
+            app:cpv_animAutostart="false"
+            app:cpv_indeterminate="true"
+            app:cpv_thickness="4dp" />
+    </FrameLayout>
   <android.support.v4.widget.SwipeRefreshLayout
       android:id="@+id/refresh_help"
       android:layout_width="match_parent"
       android:layout_height="match_parent">
-  <android.support.v7.widget.RecyclerView
+  <com.jcodecraeer.xrecyclerview.XRecyclerView
     android:id="@+id/help_question"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
