@@ -240,9 +240,12 @@ public class PostFragment extends Fragment implements SwipeRefreshLayout.OnRefre
                     Gson gson = new Gson();
                     postBean = gson.fromJson(result, PostBean.class);
                     List<PostBean.content> ListMore=postBean.getContents();
-                    list.addAll(ListMore);
-                    adapter=new PostAdapter(getContext(),list);
-                    handler.sendEmptyMessage(ConsUtils.LOAD_MORE_FINISH);
+                    if (ListMore!=null){
+                        list.addAll(ListMore);
+                        adapter=new PostAdapter(getContext(),list);
+                        handler.sendEmptyMessage(ConsUtils.LOAD_MORE_FINISH);
+                    }else
+                        handler.sendEmptyMessage(ConsUtils.NO_MORE_DATA);
                 }
 
                 @Override
@@ -298,31 +301,36 @@ public class PostFragment extends Fragment implements SwipeRefreshLayout.OnRefre
 
 
     public void setPostAdapter(){
-        adapter=new PostAdapter(getContext(),list);
-        postRecyclerView.setAdapter(adapter);
-        adapter.setOnItemClickListener(new PostAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(View view, int position) {
-                PostBean.content ItemContent = list.get(position-1);
-                Bundle bundle=new Bundle();
-                bundle.putString("UserNickName",ItemContent.userInfo.getUserVirtualName());
-                bundle.putString("UserHeadImgUrl",ItemContent.userInfo.getUserPicture());
-                bundle.putString("PostTopic",ItemContent.getCommunicateTopic());
-                bundle.putString("PostContent", ItemContent.getCommunitcateContent());
-                bundle.putInt("communicateId",ItemContent.getCommunicateId());
-                if (ItemContent.getPictureList()!=null){
+        if (list!=null){
+            adapter=new PostAdapter(getContext(),list);
+            postRecyclerView.setAdapter(adapter);
+            adapter.setOnItemClickListener(new PostAdapter.OnItemClickListener() {
+                @Override
+                public void onItemClick(View view, int position) {
+                    PostBean.content ItemContent = list.get(position-1);
+                    Bundle bundle=new Bundle();
+                    bundle.putString("UserNickName",ItemContent.userInfo.getUserVirtualName());
+                    bundle.putString("UserHeadImgUrl",ItemContent.userInfo.getUserPicture());
+                    bundle.putString("PostTopic",ItemContent.getCommunicateTopic());
+                    bundle.putString("PostContent", ItemContent.getCommunitcateContent());
+                    bundle.putInt("communicateId",ItemContent.getCommunicateId());
+                    if (ItemContent.getPictureList()!=null){
 
-                    for(String url:ItemContent.getPictureList()){
-                        PicassoPostImageHelper.ClearImgByUrl(getContext(),url);
+                        for(String url:ItemContent.getPictureList()){
+                            PicassoPostImageHelper.ClearImgByUrl(getContext(),url);
+                        }
+                        bundle.putStringArrayList("PostImages", (ArrayList<String>) ItemContent.getPictureList());
                     }
-                    bundle.putStringArrayList("PostImages", (ArrayList<String>) ItemContent.getPictureList());
-                }
 
-                Intent intent=new Intent(getActivity(),PostDetailActivity.class);
-                intent.putExtras(bundle);
-                startActivity(intent);
-            }
-        });
+                    Intent intent=new Intent(getActivity(),PostDetailActivity.class);
+                    intent.putExtras(bundle);
+                    startActivity(intent);
+                }
+            });
+        }else{
+            Toast.makeText(getContext(),"网络异常",Toast.LENGTH_SHORT).show();
+        }
+
     }
 
 //

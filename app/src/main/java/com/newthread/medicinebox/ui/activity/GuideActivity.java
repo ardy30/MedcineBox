@@ -22,7 +22,7 @@ import com.newthread.medicinebox.utils.SpUtils.SpFirst;
  */
 public class GuideActivity extends AppCompatActivity {
     private ViewPager viewPager;
-    private int[] color=new int[]{R.mipmap.guide_1,R.mipmap.guide_2,R.mipmap.guide_3};
+    private int[] color=new int[]{R.drawable.guide1,R.drawable.guide2,R.drawable.guide3};
     private Button bt;
     private LinearLayout pointGray;
     private RelativeLayout rl;
@@ -91,7 +91,7 @@ public class GuideActivity extends AppCompatActivity {
             pointGray.addView(point);
         }
         redPoint = new View(this);
-        redPoint.setBackgroundResource(R.drawable.ic_page_indicator_focused);
+        redPoint.setBackgroundResource(R.drawable.ic_page_indicator_focused_white);
         redPoint.setLayoutParams(new RelativeLayout.LayoutParams(20, 20));
         rl.addView(redPoint);
 

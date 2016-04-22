@@ -79,7 +79,7 @@ public class UrlConnectionUtils {
                 response.append(line);
             }
             Result=response.toString();
-            if (listener!=null){
+            if (listener!=null&&!Result.isEmpty()){
                 listener.onSuccess(Result);
             }
         } catch (MalformedURLException e) {

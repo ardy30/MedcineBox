@@ -3,5 +3,11 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
 <include
-    layout="@layout/toolbar_normal"/>
+    layout="@layout/toolbar_normal_test"/>
+ <android.support.design.widget.FloatingActionButton
+     android:id="@+id/floatAction_test"
+     android:layout_height="wrap_content"
+     android:layout_gravity="center"
+     android:src="@mipmap/ic_launcher"
+     android:layout_width="wrap_content"/>
 </LinearLayout>

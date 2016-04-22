@@ -43,7 +43,13 @@ public class ConsUtils {
     public static final int LOAD_FAILED = 36;//加载失败
     public static final int IMAGE_REQUEST = 37;//图片请求
     public static final int ADD_FINISH = 38;//添加完成
-    public static  final int NO_MORE_DATA=39;//无更多数据源
+    public static  final int NO_MORE_DATA=39;//
+    public static final int ADD_COMMENT_SUCCESS=40;//添加评论成功
+    public static final int ADD_COMMENT_FAILED=41;//添加评论成功
+    public static final int LOAD_POST_COMMENTS_SUCCEESS=42;//加载评论成功
+    public static final int LOAD_POST_COMMENTS_FAILED=43;//加载评论失败
+
+
     //文件lujing
     public static String path="data/data/com.newthread.medicinebox/cache/cropped.jpg";
     public static String path_cache ="data/data/com.newthread.medicinebox/cache/";

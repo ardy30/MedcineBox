@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+<com.github.siyamed.shapeimageview.RoundedImageView
+    android:id="@+id/post_head_img"
+    android:layout_marginStart="10dp"
+    android:src="@drawable/img_login1"
+    app:siRadius="6dp"
+    app:siBorderWidth="0dp"
+    app:siBorderColor="@color/colorAccent1"
+    app:siSquare="true"
+    android:layout_width="30dp"
+    android:layout_height="30dp" />
+ <TextView
+     android:id="@+id/post_comment_content"
+     android:textColor="#000"
+     android:layout_marginStart="5dp"
+     android:textSize="15sp"
+     android:layout_gravity="center"
+     android:text="9999"
+     android:layout_width="match_parent"
+     android:layout_height="wrap_content" />
+    </LinearLayout>
+ <View
+     android:layout_marginLeft="10dp"
+     android:layout_marginRight="5dp"
+     android:background="@color/colorgray"
+     android:layout_width="match_parent"
+     android:layout_height="1dp"/>
+</LinearLayout>

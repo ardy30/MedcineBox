@@ -3,6 +3,7 @@ package com.newthread.medicinebox.bean;
 import java.util.List;
 
 /**
+ * 用于帖子的解析
  * Created by 张浩 on 2016/3/21.
  */
 public class PostBean{
@@ -30,9 +31,9 @@ public class PostBean{
         this.contents = contents;
     }
 
-    public String code;
-    public String message;
-    public List<content> contents;
+    private String code;
+    private String message;
+    private List<content> contents;
     public static class content{
         public int getCommunicateId() {
             return communicateId;
@@ -76,10 +77,10 @@ public class PostBean{
             this.communitcateContent = communitcateContent;
         }
 
-        public String communitcateContent;
-        public String communicateTopic;
-        public int communicateZhuan;
-        public String communicateTime;
+        private String communitcateContent;
+        private String communicateTopic;
+        private int communicateZhuan;
+        private String communicateTime;
 
         public List<String> getPictureList() {
             return pictureList;
@@ -89,7 +90,7 @@ public class PostBean{
             this.pictureList = pictureList;
         }
 
-        public List<String> pictureList;
+        private List<String> pictureList;
         public CurrentUser userInfo;
         public static class CurrentUser{
             public String getUserName() {
@@ -148,13 +149,13 @@ public class PostBean{
                 this.userLastModify = userLastModify;
             }
 
-            public String userName;
-            public String userVirtualName;
-            public String userPicture;
-            public String userAge;
-            public String userPossition;
-            public String userRegisterTime;
-            public String userLastModify;
+            private String userName;
+            private String userVirtualName;
+            private String userPicture;
+            private String userAge;
+            private String userPossition;
+            private String userRegisterTime;
+            private String userLastModify;
         }
         }
     }

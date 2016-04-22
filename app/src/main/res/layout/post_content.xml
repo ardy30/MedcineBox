@@ -34,6 +34,7 @@
                         android:src="@drawable/img_zhuangfa"
                         />
                 </LinearLayout>
+
                 <LinearLayout
                     android:id="@+id/lin_like_detail"
                     android:clickable="true"
@@ -52,11 +53,20 @@
                 </LinearLayout>
 
             </LinearLayout>
+            <View
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="10dp"
+                android:background="@color/colorgray"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"/>
             <android.support.v7.widget.RecyclerView
-                android:layout_marginTop="10dp"
                 android:layout_margin="2dp"
                 android:id="@+id/post_detail_content_comments"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>
+            <include
+                layout="@layout/post_comment"/>
         </LinearLayout>
 </LinearLayout>

@@ -54,4 +54,5 @@ dependencies {
     compile 'com.github.siyamed:android-shape-imageview:0.9.+@aar'
     compile 'com.commit451:PhotoView:1.2.5'
     compile 'com.stylingandroid.prism:prism:1.0.1'
+    compile 'com.stylingandroid.prism:prism-viewpager:1.0.1'
 }

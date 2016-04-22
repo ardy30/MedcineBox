@@ -13,16 +13,16 @@ import butterknife.ButterKnife;
  * Created by 张浩 on 2016/2/12.
  */
 public class DeveloperActivity extends BaseActivity {
-//    @Bind(R.id.toolbar_title)
-//    TextView toolbarTitle;
-//    @Bind(R.id.toolbar)
-//    Toolbar toolbar;
+    @Bind(R.id.toolbar_title)
+    TextView toolbarTitle;
+    @Bind(R.id.toolbar)
+    Toolbar toolbar;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.postdetail);
-//        ButterKnife.bind(this);
-//        toolbar.setTitle("");
-//        setUpToolBar(toolbar, true, true);
+        setContentView(R.layout.develop);
+        ButterKnife.bind(this);
+        toolbar.setTitle("");
+        setUpToolBar(toolbar, true, true);
     }
 }

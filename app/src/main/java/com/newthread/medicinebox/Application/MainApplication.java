@@ -18,9 +18,15 @@ public class MainApplication extends LitePalApplication {
     @Override
     public void onCreate() {
         super.onCreate();
-        Log.d("create","create");
+        Log.d("create", "create");
         init();
+        initToolBar();
     }
+
+    private void initToolBar() {
+
+    }
+
     /**
      *
      */

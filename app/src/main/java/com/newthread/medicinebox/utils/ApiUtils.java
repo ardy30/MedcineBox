@@ -20,7 +20,8 @@ public class ApiUtils {
     public static String getPostImages=ServerAddress+"forum/Communication_Picture/";//获取帖子图片
     public static String getPostUserPic=ServerAddress+"user/";//获取帖子用户头像
     public static String Zan=ServerAddress+"forum/zan.do";//点赞接口
-
+    public static String AddComment=ServerAddress+"forum/addcomment.do";//添加评论
+    public static String GetCommentMaxCount=ServerAddress+"forum/commentinfomaxcount.do?communicateid=";//获取评论最大数
     /**
      * 获取帮助帖子首页数据
      * @param page
@@ -31,5 +32,18 @@ public class ApiUtils {
     public static String GetPostItem(int page,int capacity,int maxCount){
       return ServerAddress+"forum/communicationtitlelist.do?"+"page="+page+"&capacity="+capacity
               +"&start="+maxCount;
+    }
+
+    /**
+     * 获取帮助评论列表
+     * @param communicateid
+     * @param start
+     * @param page
+     * @param capacity
+     * @return
+     */
+    public static String GetPostComment(int communicateid,int start,int page,int capacity){
+        return ServerAddress+"forum/commentinfolist.do?communicateid="+communicateid+
+                "&start="+start+"&page="+page+"&capacity="+capacity;
     }
 }

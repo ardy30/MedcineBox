@@ -15,8 +15,13 @@ public class PostHelper {
     UrlConnectionJsonPost jsonPost=new UrlConnectionJsonPost();
     //点赞的回调接口
     public interface OnLikedListener{
-        String OnLikedSuccess(String success);
-        String OnLikedFailed(String fail);
+        void OnLikedSuccess(String success);
+        void OnLikedFailed(String fail);
+    }
+
+    public interface OnCommentListener{
+        void OnAddCommnetSuccess(String success);
+        void OnAddCommnetFailed(String fail);
     }
 
     /**
@@ -41,6 +46,32 @@ public class PostHelper {
                 }
             }
         }
-
     }
+
+    /**
+     * 添加品评论接口
+     * @param url
+     * @param jsonObject
+     * @param listener
+     */
+    public void SendPost(String url,JSONObject jsonObject,OnCommentListener listener) throws JSONException {
+        String Result=jsonPost.UrlPostJson(url,jsonObject);
+        if (Result!=null){
+            JSONObject object=JsonHelper.getJSON(Result);
+            if (object.getString("code").equals("N01")){
+                if (listener!=null){
+                    listener.OnAddCommnetSuccess(object.getString("message"));
+                }
+            }else{
+                if (listener!=null){
+                    listener.OnAddCommnetFailed(object.getString("message"));
+                }
+            }
+        }else{
+            if(listener!=null){
+              listener.OnAddCommnetFailed("评论失败!");
+            }
+        }
+    }
+
 }
